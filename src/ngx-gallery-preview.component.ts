@@ -295,6 +295,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     mouseMoveHandler(e) {
+        console.log('mouse move');
         if (this.isMove) {
             this.positionLeft = this.initialLeft + (this.getClientX(e) - this.initialX);
             this.positionTop = this.initialTop + (this.getClientY(e) - this.initialY);
