@@ -169,7 +169,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     showNext(): boolean {
-        console.log(this.fullSize);
         if (this.canShowNext()) {
             this.index++;
 

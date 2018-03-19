@@ -66,7 +66,6 @@ export class NgxGalleryComponent implements OnInit, DoCheck, AfterViewInit   {
 
     ngOnInit() {
         this.options = this.options.map((opt) => new NgxGalleryOptions(opt));
-        console.log(this.options);
         this.sortOptions();
         this.setBreakpoint();
         this.setOptions();
