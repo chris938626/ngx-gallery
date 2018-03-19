@@ -29,7 +29,8 @@ Desktop.ini
 **/*.ngfactory.ts
 
 # Build files
-dist/*
+# Add build files to work with github checkouts
+# dist/*
 
 # Coverage
 coverage/*
