@@ -24,7 +24,8 @@ import { NgxGalleryHelperService } from './ngx-gallery-helper.service';
         </div>
         <div class="ngx-gallery-preview-wrapper" (click)="closeOnClick && close()" (mouseup)="mouseUpHandler($event)" (mousemove)="mouseMoveHandler($event)" (touchend)="mouseUpHandler($event)" (touchmove)="mouseMoveHandler($event)">
             <div class="ngx-gallery-preview-img-wrapper">
-                <img #previewImage class="ngx-gallery-preview-img ngx-gallery-center" [src]="src ? src : '#'" (click)="$event.stopPropagation()" (mouseenter)="imageMouseEnter()" (mouseleave)="imageMouseLeave()" (mousedown)="mouseDownHandler($event)" (touchstart)="mouseDownHandler($event)" [class.ngx-gallery-active]="!loading" [class.animation]="animation" [class.ngx-gallery-grab]="canDragOnZoom()" [style.transform]="getTransform()" [style.left]="positionLeft + 'px'" [style.top]="positionTop + 'px'"/>
+            
+                <img #previewImage class="ngx-gallery-preview-img ngx-gallery-center" [class.ngx-gallery-fullsize] ="fullSize" [src]="src ? src : '#'" (click)="$event.stopPropagation()" (mouseenter)="imageMouseEnter()" (mouseleave)="imageMouseLeave()" (mousedown)="mouseDownHandler($event)" (touchstart)="mouseDownHandler($event)" [class.ngx-gallery-active]="!loading" [class.animation]="animation" [class.ngx-gallery-grab]="canDragOnZoom()" [style.transform]="getTransform()" [style.left]="positionLeft + 'px'" [style.top]="positionTop + 'px'"/>
             </div>
             <div class="ngx-gallery-preview-text" *ngIf="showDescription && description" [innerHTML]="description"></div>
         </div>
@@ -48,6 +49,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     @Input() showDescription: boolean;
     @Input() swipe: boolean;
     @Input() fullscreen: boolean;
+    @Input() fullSize: boolean;
     @Input() forceFullscreen: boolean;
     @Input() closeOnClick: boolean;
     @Input() closeOnEsc: boolean;
@@ -72,6 +74,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     @Input() rotate: boolean;
     @Input() rotateLeftIcon: string;
     @Input() rotateRightIcon: string;
+
 
     @Output() onOpen = new EventEmitter();
     @Output() onClose = new EventEmitter();
@@ -166,6 +169,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     showNext(): boolean {
+        console.log(this.fullSize);
         if (this.canShowNext()) {
             this.index++;
 
@@ -267,14 +271,17 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     canZoomIn(): boolean {
+        if (this.fullSize===true) return true;
         return this.zoomValue < this.zoomMax ? true : false;
     }
 
     canZoomOut(): boolean {
+        if (this.fullSize===true) return true;
         return this.zoomValue > this.zoomMin ? true : false;
     }
 
     canDragOnZoom() {
+        if (this.fullSize===true) return true;
         return this.zoom && this.zoomValue > 1;
     }
 

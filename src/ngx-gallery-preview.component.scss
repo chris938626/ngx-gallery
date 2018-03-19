@@ -36,6 +36,11 @@
         cursor: grab;
         cursor: -webkit-grab;
     }
+
+    &.ngx-gallery-fullsize {
+        max-width: initial;
+        max-height: initial;
+    }
 }
 
 .ngx-gallery-icon.ngx-gallery-spinner {
