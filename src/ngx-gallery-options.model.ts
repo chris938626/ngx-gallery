@@ -9,7 +9,7 @@ export interface INgxGalleryOptions {
     height?: string;
     breakpoint?: number;
     fullWidth?: boolean;
-    fullSize?:boolean;
+    previewFullSize?:boolean;
     layout?: string;
     startIndex?: number;
     linkTarget?: string;
@@ -77,7 +77,7 @@ export class NgxGalleryOptions implements INgxGalleryOptions {
     height?: string;
     breakpoint?: number;
     fullWidth?: boolean;
-    fullSize?:boolean;
+    previewFullSize?:boolean;
     layout?: string;
     startIndex?: number;
     linkTarget?: string;
@@ -151,7 +151,7 @@ export class NgxGalleryOptions implements INgxGalleryOptions {
         this.width = use(obj.width, '500px');
         this.height = use(obj.height, '400px');
         this.fullWidth = use(obj.fullWidth, false);
-        this.fullSize = use(obj.fullSize, false);
+        this.previewFullSize = use(obj.previewFullSize, false);
         this.layout = use(obj.layout, NgxGalleryLayout.ThumbnailsBottom);
         this.startIndex = use(obj.startIndex, 0);
         this.linkTarget = use(obj.linkTarget, '_blank');
