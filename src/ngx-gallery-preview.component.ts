@@ -270,11 +270,11 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     canZoomIn(): boolean {
-        return this.previewFullSize || !(this.zoomValue < this.zoomMax);
+        return this.previewFullSize || (this.zoomValue < this.zoomMax);
     }
 
     canZoomOut(): boolean {
-        return this.previewFullSize || !(this.zoomValue > this.zoomMin);
+        return this.previewFullSize || (this.zoomValue > this.zoomMin);
     }
 
     canDragOnZoom() {
