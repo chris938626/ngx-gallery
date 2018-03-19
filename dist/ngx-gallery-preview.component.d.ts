@@ -20,6 +20,7 @@ export declare class NgxGalleryPreviewComponent implements OnChanges {
     showDescription: boolean;
     swipe: boolean;
     fullscreen: boolean;
+    fullSize: boolean;
     forceFullscreen: boolean;
     closeOnClick: boolean;
     closeOnEsc: boolean;
