@@ -9,7 +9,7 @@ export interface INgxGalleryOptions {
     height?: string;
     breakpoint?: number;
     fullWidth?: boolean;
-    previewFullSize?:boolean;
+    previewFullSize?: boolean;
     layout?: string;
     startIndex?: number;
     linkTarget?: string;
@@ -77,7 +77,7 @@ export class NgxGalleryOptions implements INgxGalleryOptions {
     height?: string;
     breakpoint?: number;
     fullWidth?: boolean;
-    previewFullSize?:boolean;
+    previewFullSize?: boolean;
     layout?: string;
     startIndex?: number;
     linkTarget?: string;
