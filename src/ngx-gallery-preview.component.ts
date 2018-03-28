@@ -1,14 +1,19 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ElementRef, HostListener, ViewChild } from '@angular/core';
+import {
+    Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ElementRef, HostListener, ViewChild,
+    ViewChildren, AfterViewInit
+} from '@angular/core';
 import { SafeResourceUrl, DomSanitizer, SafeUrl, SafeStyle } from '@angular/platform-browser';
 
 import { NgxGalleryAction } from './ngx-gallery-action.model';
 import { NgxGalleryHelperService } from './ngx-gallery-helper.service';
+import { NgxGalleryScrollOverviewComponent } from "./ngx-gallery-scroll-overview/ngx-gallery-scroll-overview.component";
+import { NgxGalleryActionComponent } from "./ngx-gallery-action.component";
 
 @Component({
     selector: 'ngx-gallery-preview',
     template: `
         <ngx-gallery-arrows (onPrevClick)="showPrev()" (onNextClick)="showNext()" [prevDisabled]="!canShowPrev()" [nextDisabled]="!canShowNext()" [arrowPrevIcon]="arrowPrevIcon" [arrowNextIcon]="arrowNextIcon"></ngx-gallery-arrows>
-        <div class="ngx-gallery-preview-top">
+        <div class="ngx-gallery-preview-top">TTTTEST
             <div class="ngx-gallery-preview-icons">
                 <ngx-gallery-action *ngFor="let action of actions" [icon]="action.icon" [disabled]="action.disabled" [titleText]="action.titleText" (onClick)="action.onClick($event)"></ngx-gallery-action>
                 <ngx-gallery-action *ngIf="zoom" [icon]="zoomOutIcon" [disabled]="!canZoomOut()" (onClick)="zoomOut()"></ngx-gallery-action>
@@ -17,15 +22,16 @@ import { NgxGalleryHelperService } from './ngx-gallery-helper.service';
                 <ngx-gallery-action *ngIf="rotate" [icon]="rotateRightIcon" (onClick)="rotateRight()"></ngx-gallery-action>
                 <ngx-gallery-action *ngIf="fullscreen" [icon]="'ngx-gallery-fullscreen ' + fullscreenIcon" (onClick)="manageFullscreen()"></ngx-gallery-action>
                 <ngx-gallery-action [icon]="'ngx-gallery-close ' + closeIcon" (onClick)="close()"></ngx-gallery-action>
+                <ngx-gallery-action #galleryContainer [rectangleScroll]="true" [icon]="'ngx-gallery-close ' + closeIcon" [gallery]="this" ></ngx-gallery-action>
             </div>
-        </div>
+        </div> 
         <div class="ngx-spinner-wrapper ngx-gallery-center" [class.ngx-gallery-active]="showSpinner">
             <i class="ngx-gallery-icon ngx-gallery-spinner {{spinnerIcon}}" aria-hidden="true"></i>
-        </div>
+        </div> 
         <div class="ngx-gallery-preview-wrapper" (click)="closeOnClick && close()" (mouseup)="mouseUpHandler($event)" (mousemove)="mouseMoveHandler($event)" (touchend)="mouseUpHandler($event)" (touchmove)="mouseMoveHandler($event)">
             <div class="ngx-gallery-preview-img-wrapper">
             
-                <img #previewImage class="ngx-gallery-preview-img ngx-gallery-center" [src]="src ? src : '#'" (click)="$event.stopPropagation()" (mouseenter)="imageMouseEnter()" (mouseleave)="imageMouseLeave()" (mousedown)="mouseDownHandler($event)" (touchstart)="mouseDownHandler($event)" [class.ngx-gallery-active]="!loading" [class.animation]="animation" [class.ngx-gallery-grab]="canDragOnZoom()" [class.ngx-gallery-fullsize]="fullSize" [style.transform]="getTransform()" [style.left]="positionLeft + 'px'" [style.top]="positionTop + 'px'"/>
+            <img #previewImage class="ngx-gallery-preview-img ngx-gallery-center" [src]="src ? src : '#'" (click)="$event.stopPropagation()" (mouseenter)="imageMouseEnter()" (mouseleave)="imageMouseLeave()" (mousedown)="mouseDownHandler($event)" (touchstart)="mouseDownHandler($event)" [class.ngx-gallery-active]="!loading" [class.animation]="animation" [class.ngx-gallery-grab]="canDragOnZoom()" [class.ngx-gallery-fullsize]="fullSize" [style.transform]="getTransform()" [style.left]="positionLeft + 'px'" [style.top]="positionTop + 'px'"/>
             </div>
             <div class="ngx-gallery-preview-text" *ngIf="showDescription && description" [innerHTML]="description"></div>
         </div>
@@ -80,6 +86,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     @Output() onActiveChange = new EventEmitter<number>();
 
     @ViewChild('previewImage') previewImage: ElementRef;
+    @ViewChild('galleryContainer') galleryContainer;
 
     private index = 0;
     private isOpen = false;
@@ -180,6 +187,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         } else {
             return false;
         }
+
     }
 
     showPrev(): void {
@@ -410,7 +418,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         if (typeof img.naturalWidth !== 'undefined' && img.naturalWidth === 0) {
             return false;
         }
-
+        this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
         return true;
     }
 }
