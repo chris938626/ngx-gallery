@@ -29,7 +29,7 @@ import { NgxGalleryActionComponent } from "./ngx-gallery-action.component";
                 <ngx-gallery-action *ngIf="rotate" [icon]="rotateRightIcon" (onClick)="rotateRight()"></ngx-gallery-action>
                 <ngx-gallery-action *ngIf="fullscreen" [icon]="'ngx-gallery-fullscreen ' + fullscreenIcon" (onClick)="manageFullscreen()"></ngx-gallery-action>
                 <ngx-gallery-action [icon]="'ngx-gallery-close ' + closeIcon" (onClick)="close()"></ngx-gallery-action>
-                <ngx-gallery-action #galleryContainer [rectangleScroll]="true" [gallery]="this" ></ngx-gallery-action>
+                <ngx-gallery-action #galleryContainer [rectangleScroll]="rectangleScroll" [gallery]="this" ></ngx-gallery-action>
             </div>
         </div> 
         <div class="ngx-spinner-wrapper ngx-gallery-center" [class.ngx-gallery-active]="showSpinner">
@@ -56,6 +56,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     zoomValue = 1;
     loading = false;
     rotateValue = 0;
+    rectangleScroll = true;
 
     @Input() images: string[] | SafeResourceUrl[];
     @Input() descriptions: string[];
@@ -182,6 +183,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
 
     showNext(): boolean {
         if (this.canShowNext()) {
+            this.rectangleScroll = false;
             this.index++;
 
             if (this.index === this.images.length) {
@@ -197,6 +199,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
 
     showPrev(): void {
         if (this.canShowPrev()) {
+            this.rectangleScroll = false;
             this.index--;
 
             if (this.index < 0) {
@@ -424,7 +427,14 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         if (typeof img.naturalWidth !== 'undefined' && img.naturalWidth === 0) {
             return false;
         }
-        this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+        if ( img.naturalHeight > window.innerHeight ){
+            console.log("rectangle scroll active")
+            this.rectangleScroll = true;
+            //this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+        } else {
+            console.log("rectangle scroll NOT active")
+            this.rectangleScroll = false;
+        }
         return true;
     }
 }

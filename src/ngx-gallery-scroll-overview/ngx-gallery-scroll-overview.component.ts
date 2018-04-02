@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { NgxGalleryPreviewComponent } from '../ngx-gallery-preview.component';
 
 @Component({
@@ -6,12 +6,13 @@ import { NgxGalleryPreviewComponent } from '../ngx-gallery-preview.component';
     templateUrl: './ngx-gallery-scroll-overview.component.html',
     styleUrls: ['./ngx-gallery-scroll-overview.component.scss']
 })
-export class NgxGalleryScrollOverviewComponent {
+export class NgxGalleryScrollOverviewComponent implements AfterViewInit{
     private beforeZoomLeft: number;
     private beforeZoomTop: number;
     private initialLeft: number;
     private initialTop: number;
     private SCALE_FACTOR = 8;
+
     @Input() gallery: NgxGalleryPreviewComponent;
 
     inBounds = true;
@@ -23,6 +24,7 @@ export class NgxGalleryScrollOverviewComponent {
     };
 
     constructor() {
+
     }
 
     public updateDetailZoom() {
@@ -49,6 +51,10 @@ export class NgxGalleryScrollOverviewComponent {
 
         this.initialLeft = this.gallery.positionLeft;
         this.initialTop = this.gallery.positionTop;
+    }
+
+    ngAfterViewInit(): void {
+        this.updatePreviewScales();
     }
 
     checkEdge(event) {
