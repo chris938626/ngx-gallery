@@ -1,6 +1,13 @@
 import {
-    Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ElementRef, HostListener, ViewChild,
-    ViewChildren, AfterViewInit
+    Component,
+    Input,
+    Output,
+    EventEmitter,
+    OnChanges,
+    SimpleChanges,
+    ElementRef,
+    HostListener,
+    ViewChild
 } from '@angular/core';
 import { SafeResourceUrl, DomSanitizer, SafeUrl, SafeStyle } from '@angular/platform-browser';
 
@@ -22,7 +29,7 @@ import { NgxGalleryActionComponent } from "./ngx-gallery-action.component";
                 <ngx-gallery-action *ngIf="rotate" [icon]="rotateRightIcon" (onClick)="rotateRight()"></ngx-gallery-action>
                 <ngx-gallery-action *ngIf="fullscreen" [icon]="'ngx-gallery-fullscreen ' + fullscreenIcon" (onClick)="manageFullscreen()"></ngx-gallery-action>
                 <ngx-gallery-action [icon]="'ngx-gallery-close ' + closeIcon" (onClick)="close()"></ngx-gallery-action>
-                <ngx-gallery-action #galleryContainer [rectangleScroll]="true" [icon]="'ngx-gallery-close ' + closeIcon" [gallery]="this" ></ngx-gallery-action>
+                <ngx-gallery-action #galleryContainer [rectangleScroll]="true" [gallery]="this" ></ngx-gallery-action>
             </div>
         </div> 
         <div class="ngx-spinner-wrapper ngx-gallery-center" [class.ngx-gallery-active]="showSpinner">
@@ -123,7 +130,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     open(index: number): void {
-
         this.onOpen.emit();
 
         this.index = index;
@@ -187,7 +193,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         } else {
             return false;
         }
-
     }
 
     showPrev(): void {
@@ -308,6 +313,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         if (this.isMove) {
             this.positionLeft = this.initialLeft + (this.getClientX(e) - this.initialX);
             this.positionTop = this.initialTop + (this.getClientY(e) - this.initialY);
+            this.galleryContainer.scrollOverviewComponent.updateDetailZoom();
         }
     }
 

@@ -1,16 +1,16 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { NgxGalleryPreviewComponent } from "../ngx-gallery-preview.component";
+import { Component, Input } from '@angular/core';
+import { NgxGalleryPreviewComponent } from '../ngx-gallery-preview.component';
 
 @Component({
     selector: 'ngx-gallery-scroll-overview',
     templateUrl: './ngx-gallery-scroll-overview.component.html',
     styleUrls: ['./ngx-gallery-scroll-overview.component.scss']
 })
-export class NgxGalleryScrollOverviewComponent implements OnInit {
-    imageUrl: string;
-
+export class NgxGalleryScrollOverviewComponent {
     private beforeZoomLeft: number;
     private beforeZoomTop: number;
+    private initialLeft: number;
+    private initialTop: number;
     private SCALE_FACTOR = 8;
     @Input() gallery: NgxGalleryPreviewComponent;
 
@@ -25,19 +25,14 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
     constructor() {
     }
 
-    ngOnInit() {
-        console.log("init");
-    }
-
-    public moveDetailLeft(position:number) {
-        document.getElementById("zoomContainer").style.marginLeft="0px";
-        var topVal = parseInt(document.getElementById("zoomContainer").style.marginLeft);
-        var newValue = topVal+position;
-        document.getElementById("zoomContainer").style.marginLeft=newValue+"px";
+    public updateDetailZoom() {
+        var topScaled = (this.initialTop - this.gallery.positionTop) / this.SCALE_FACTOR;
+        var leftScaled = (this.initialLeft - this.gallery.positionLeft) / this.SCALE_FACTOR;
+        var transformString = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
+        document.getElementById('zoomContainer').style.transform = transformString;
     }
 
     public updatePreviewScales() {
-        // this.moveDetailLeft(100);
         var img = document.getElementsByClassName('ngx-gallery-fullsize');
         var width = img[0].clientWidth;
         var height = img[0].clientHeight;
@@ -45,15 +40,15 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
         var widthScaled = width / this.SCALE_FACTOR;
         var heightScaled = height / this.SCALE_FACTOR;
 
-        document.getElementById("previewContainer").style.width = widthScaled + "px";
-        document.getElementById("previewContainer").style.height = heightScaled + "px";
-
+        document.getElementById('previewContainer').style.width = widthScaled + 'px';
+        document.getElementById('previewContainer').style.height = heightScaled + 'px';
         var zoomHeightScaled = window.innerHeight / this.SCALE_FACTOR;
         var zoomWidthScaled = window.innerWidth / this.SCALE_FACTOR;
-        console.log("hs"+zoomHeightScaled + " hw"+ zoomWidthScaled )
-        document.getElementById("zoomContainer").style.width = zoomWidthScaled + "px";
-        document.getElementById("zoomContainer").style.height = zoomHeightScaled + "px";
+        document.getElementById('zoomContainer').style.width = zoomWidthScaled + 'px';
+        document.getElementById('zoomContainer').style.height = zoomHeightScaled + 'px';
 
+        this.initialLeft = this.gallery.positionLeft;
+        this.initialTop = this.gallery.positionTop;
     }
 
     checkEdge(event) {
@@ -62,11 +57,8 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
 
     onStop(event) {
         var rect = event.getBoundingClientRect();
-        this.gallery.positionLeft += (this.beforeZoomLeft-rect.left)*this.SCALE_FACTOR;
-        this.gallery.positionTop += (this.beforeZoomTop-rect.top)*this.SCALE_FACTOR;
-        console.log(this.gallery.positionLeft);
-        console.log(this.gallery.positionTop);
-
+        this.gallery.positionLeft += (this.beforeZoomLeft - rect.left) * this.SCALE_FACTOR;
+        this.gallery.positionTop += (this.beforeZoomTop - rect.top) * this.SCALE_FACTOR;
     }
 
     onStart(event) {
@@ -74,5 +66,4 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
         this.beforeZoomLeft = rect.left;
         this.beforeZoomTop = rect.top;
     }
-
 }
