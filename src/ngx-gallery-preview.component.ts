@@ -293,7 +293,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     canDragOnZoom() {
-        return (this.fullSize && this.rectangleScroll)|| (this.zoom && this.zoomValue > 1);
+        return (this.fullSize && this.rectangleScroll) || (this.zoom && this.zoomValue > 1);
     }
 
     mouseDownHandler(e): void {
