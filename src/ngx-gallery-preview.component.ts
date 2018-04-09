@@ -18,7 +18,7 @@ import { NgxGalleryHelperService } from './ngx-gallery-helper.service';
     selector: 'ngx-gallery-preview',
     template: `
         <ngx-gallery-arrows (onPrevClick)="showPrev()" (onNextClick)="showNext()" [prevDisabled]="!canShowPrev()" [nextDisabled]="!canShowNext()" [arrowPrevIcon]="arrowPrevIcon" [arrowNextIcon]="arrowNextIcon"></ngx-gallery-arrows>
-        <div class="ngx-gallery-preview-top">TTTTEST
+        <div class="ngx-gallery-preview-top">
             <div class="ngx-gallery-preview-icons">
                 <ngx-gallery-action *ngFor="let action of actions" [icon]="action.icon" [disabled]="action.disabled" [titleText]="action.titleText" (onClick)="action.onClick($event)"></ngx-gallery-action>
                 <ngx-gallery-action *ngIf="zoom" [icon]="zoomOutIcon" [disabled]="!canZoomOut()" (onClick)="zoomOut()"></ngx-gallery-action>
