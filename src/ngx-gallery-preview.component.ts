@@ -429,7 +429,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         if ( img.naturalHeight > window.innerHeight ){
             this.rectangleScroll = true;
         } else {
-            console.log("rectangle scroll NOT active")
             this.rectangleScroll = false;
         }
         return true;
