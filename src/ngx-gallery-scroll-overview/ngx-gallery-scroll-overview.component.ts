@@ -6,7 +6,7 @@ import { NgxGalleryPreviewComponent } from '../ngx-gallery-preview.component';
     templateUrl: './ngx-gallery-scroll-overview.component.html',
     styleUrls: ['./ngx-gallery-scroll-overview.component.scss']
 })
-export class NgxGalleryScrollOverviewComponent implements AfterViewInit{
+export class NgxGalleryScrollOverviewComponent implements AfterViewInit {
     private beforeZoomLeft: number;
     private beforeZoomTop: number;
     private initialLeft: number;
@@ -40,7 +40,7 @@ export class NgxGalleryScrollOverviewComponent implements AfterViewInit{
         var height = img[0].clientHeight;
 
         // set the background image of the preview Container which contains the Scaled preview Image
-        document.getElementById('previewContainer').style.backgroundImage = "url('"+ img[0].getAttribute('src') +"')";
+        document.getElementById('previewContainer').style.backgroundImage = "url('" + img[0].getAttribute('src') + "')";
 
         // scale the preview image
         var widthScaled = width / this.SCALE_FACTOR;
