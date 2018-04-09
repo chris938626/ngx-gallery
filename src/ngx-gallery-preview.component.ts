@@ -13,8 +13,6 @@ import { SafeResourceUrl, DomSanitizer, SafeUrl, SafeStyle } from '@angular/plat
 
 import { NgxGalleryAction } from './ngx-gallery-action.model';
 import { NgxGalleryHelperService } from './ngx-gallery-helper.service';
-import { NgxGalleryScrollOverviewComponent } from "./ngx-gallery-scroll-overview/ngx-gallery-scroll-overview.component";
-import { NgxGalleryActionComponent } from "./ngx-gallery-action.component";
 
 @Component({
     selector: 'ngx-gallery-preview',
@@ -56,7 +54,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     zoomValue = 1;
     loading = false;
     rotateValue = 0;
-    rectangleScroll = true;
+    rectangleScroll = false;
 
     @Input() images: string[] | SafeResourceUrl[];
     @Input() descriptions: string[];
@@ -136,6 +134,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         this.index = index;
         this.isOpen = true;
         this.show(true);
+        this.showNext();
 
         if (this.forceFullscreen) {
             this.manageFullscreen();
@@ -293,7 +292,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     canDragOnZoom() {
-        return (this.fullSize && this.rectangleScroll) || (this.zoom && this.zoomValue > 1);
+        return (this.fullSize && this.rectangleScroll)|| (this.zoom && this.zoomValue > 1);
     }
 
     mouseDownHandler(e): void {
@@ -329,7 +328,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     private resetPosition() {
-        if (this.zoom) {
+        if (this.zoom || this.fullSize) {
             this.positionLeft = 0;
             this.positionTop = 0;
         }
@@ -362,7 +361,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     private closeFullscreen(): void {
-
         const doc = <any>document;
 
         if (doc.exitFullscreen) {
@@ -427,10 +425,9 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         if (typeof img.naturalWidth !== 'undefined' && img.naturalWidth === 0) {
             return false;
         }
+
         if ( img.naturalHeight > window.innerHeight ){
-            console.log("rectangle scroll active")
             this.rectangleScroll = true;
-            //this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
         } else {
             console.log("rectangle scroll NOT active")
             this.rectangleScroll = false;

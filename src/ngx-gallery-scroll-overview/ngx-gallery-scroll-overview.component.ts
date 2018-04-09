@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import { Component, Input, AfterViewInit } from '@angular/core';
 import { NgxGalleryPreviewComponent } from '../ngx-gallery-preview.component';
 
 @Component({
@@ -39,16 +39,22 @@ export class NgxGalleryScrollOverviewComponent implements AfterViewInit{
         var width = img[0].clientWidth;
         var height = img[0].clientHeight;
 
+        // set the background image of the preview Container which contains the Scaled preview Image
+        document.getElementById('previewContainer').style.backgroundImage = "url('"+ img[0].getAttribute('src') +"')";
+
+        // scale the preview image
         var widthScaled = width / this.SCALE_FACTOR;
         var heightScaled = height / this.SCALE_FACTOR;
-
         document.getElementById('previewContainer').style.width = widthScaled + 'px';
         document.getElementById('previewContainer').style.height = heightScaled + 'px';
+
+        // scale the zoom area for visualization which area the user sees
         var zoomHeightScaled = window.innerHeight / this.SCALE_FACTOR;
         var zoomWidthScaled = window.innerWidth / this.SCALE_FACTOR;
         document.getElementById('zoomContainer').style.width = zoomWidthScaled + 'px';
         document.getElementById('zoomContainer').style.height = zoomHeightScaled + 'px';
 
+        // init
         this.initialLeft = this.gallery.positionLeft;
         this.initialTop = this.gallery.positionTop;
     }
