@@ -3,9 +3,12 @@
     position: absolute;
     top: 50vh;
     left:-300px;
+    overflow: hidden;
 }
 
 .image-detail {
     opacity: 0.5;
-    padding:0;
+    padding: 0;
+    background:black;
+    cursor: col-resize;
 }

@@ -142,7 +142,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         this.index = index;
         this.isOpen = true;
         this.show(true);
-        this.showNext();
 
         if (this.forceFullscreen) {
             this.manageFullscreen();
