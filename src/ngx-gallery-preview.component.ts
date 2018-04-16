@@ -323,6 +323,8 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         if (this.isMove) {
             this.positionLeft = this.initialLeft + (this.getClientX(e) - this.initialX);
             this.positionTop = this.initialTop + (this.getClientY(e) - this.initialY);
+            this.zoomPosition.positionLeft = this.positionLeft;
+            this.zoomPosition.positionTop = this.positionTop;
             this.galleryContainer.scrollOverviewComponent.updateDetailZoom();
         }
     }
