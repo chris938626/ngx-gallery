@@ -13,6 +13,7 @@ import { SafeResourceUrl, DomSanitizer, SafeUrl, SafeStyle } from '@angular/plat
 
 import { NgxGalleryAction } from './ngx-gallery-action.model';
 import { NgxGalleryHelperService } from './ngx-gallery-helper.service';
+import { ZoomPosition } from "./ngx-gallery-scroll-overview/zoomPosition";
 
 @Component({
     selector: 'ngx-gallery-preview',
@@ -27,7 +28,7 @@ import { NgxGalleryHelperService } from './ngx-gallery-helper.service';
                 <ngx-gallery-action *ngIf="rotate" [icon]="rotateRightIcon" (onClick)="rotateRight()"></ngx-gallery-action>
                 <ngx-gallery-action *ngIf="fullscreen" [icon]="'ngx-gallery-fullscreen ' + fullscreenIcon" (onClick)="manageFullscreen()"></ngx-gallery-action>
                 <ngx-gallery-action [icon]="'ngx-gallery-close ' + closeIcon" (onClick)="close()"></ngx-gallery-action>
-                <ngx-gallery-action #galleryContainer [rectangleScroll]="rectangleScroll" [gallery]="this" ></ngx-gallery-action>
+                <ngx-gallery-action *ngIf="zoomPosition" #galleryContainer (onZoomChanged) = "zoomChanged()" [zoomPosition] = "zoomPosition" [rectangleScroll]="rectangleScroll" [gallery]="this" ></ngx-gallery-action>
             </div>
         </div> 
         <div class="ngx-spinner-wrapper ngx-gallery-center" [class.ngx-gallery-active]="showSpinner">
@@ -55,6 +56,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     loading = false;
     rotateValue = 0;
     rectangleScroll = false;
+    zoomPosition = new ZoomPosition();
 
     @Input() images: string[] | SafeResourceUrl[];
     @Input() descriptions: string[];
@@ -111,6 +113,12 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             this.helperService.manageSwipe(this.swipe, this.elementRef,
             'preview', () => this.showNext(), () => this.showPrev());
         }
+    }
+
+    zoomChanged() {
+        console.log(this.zoomPosition);
+        this.positionLeft = this.zoomPosition.positionLeft;
+        this.positionTop = this.zoomPosition.positionTop;
     }
 
     @HostListener('window:keydown', ['$event']) onKeyDown(e) {
@@ -331,6 +339,8 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         if (this.zoom || this.fullSize) {
             this.positionLeft = 0;
             this.positionTop = 0;
+            this.zoomPosition.positionLeft = 0;
+            this.zoomPosition.positionTop = 0;
         }
     }
 

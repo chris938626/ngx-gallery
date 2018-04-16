@@ -1,5 +1,6 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
+import { Component, Input, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { NgxGalleryPreviewComponent } from '../ngx-gallery-preview.component';
+import { ZoomPosition } from "./zoomPosition";
 
 @Component({
     selector: 'ngx-gallery-scroll-overview',
@@ -13,7 +14,8 @@ export class NgxGalleryScrollOverviewComponent implements AfterViewInit {
     private initialTop: number;
     private SCALE_FACTOR = 8;
 
-    @Input() gallery: NgxGalleryPreviewComponent;
+    @Output() onZoomChanged = new EventEmitter();
+    @Input() zoomPosition: ZoomPosition;
 
     inBounds = true;
     edge = {
@@ -28,8 +30,8 @@ export class NgxGalleryScrollOverviewComponent implements AfterViewInit {
     }
 
     public updateDetailZoom() {
-        var topScaled = (this.initialTop - this.gallery.positionTop) / this.SCALE_FACTOR;
-        var leftScaled = (this.initialLeft - this.gallery.positionLeft) / this.SCALE_FACTOR;
+        var topScaled = (this.initialTop - this.zoomPosition.positionTop) / this.SCALE_FACTOR;
+        var leftScaled = (this.initialLeft - this.zoomPosition.positionLeft) / this.SCALE_FACTOR;
         var transformString = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
         document.getElementById('zoomContainer').style.transform = transformString;
     }
@@ -55,8 +57,8 @@ export class NgxGalleryScrollOverviewComponent implements AfterViewInit {
         document.getElementById('zoomContainer').style.height = zoomHeightScaled + 'px';
 
         // init
-        this.initialLeft = this.gallery.positionLeft;
-        this.initialTop = this.gallery.positionTop;
+        this.initialLeft = this.zoomPosition.positionLeft;
+        this.initialTop = this.zoomPosition.positionTop;
     }
 
     ngAfterViewInit(): void {
@@ -69,8 +71,9 @@ export class NgxGalleryScrollOverviewComponent implements AfterViewInit {
 
     onStop(event) {
         var rect = event.getBoundingClientRect();
-        this.gallery.positionLeft += (this.beforeZoomLeft - rect.left) * this.SCALE_FACTOR;
-        this.gallery.positionTop += (this.beforeZoomTop - rect.top) * this.SCALE_FACTOR;
+        this.zoomPosition.positionLeft += (this.beforeZoomLeft - rect.left) * this.SCALE_FACTOR;
+        this.zoomPosition.positionTop += (this.beforeZoomTop - rect.top) * this.SCALE_FACTOR;
+        this.onZoomChanged.emit();
     }
 
     onStart(event) {
