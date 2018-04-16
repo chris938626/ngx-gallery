@@ -5,12 +5,12 @@ import { ZoomPosition } from './ngx-gallery-scroll-overview/zoomPosition';
 @Component({
     selector: 'ngx-gallery-action',
     template: `
-        <i class="ngx-gallery-icon {{ icon }}" [class.ngx-gallery-icon-disabled]="disabled"
+        <div class="ngx-gallery-icon {{ icon }}" [class.ngx-gallery-icon-disabled]="disabled"
             aria-hidden="true"
             title="{{ titleText }}"
             (click)="handleClick($event)" >
            <ngx-gallery-scroll-overview #scrollOverviewComponent (onZoomChanged)="zoomChanged()" [zoomPosition] = "zoomPosition" *ngIf="rectangleScroll"> </ngx-gallery-scroll-overview>
-        </i>`,
+        </div>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgxGalleryActionComponent {
