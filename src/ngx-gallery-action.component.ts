@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { NgxGalleryPreviewComponent } from "./ngx-gallery-preview.component";
-import { ZoomPosition } from "./ngx-gallery-scroll-overview/zoomPosition";
+import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { NgxGalleryPreviewComponent } from './';
+import { ZoomPosition } from './ngx-gallery-scroll-overview/zoomPosition';
 
 @Component({
     selector: 'ngx-gallery-action',

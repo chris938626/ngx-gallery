@@ -1,6 +1,5 @@
 import { Component, Input, AfterViewInit, Output, EventEmitter } from '@angular/core';
-import { NgxGalleryPreviewComponent } from '../ngx-gallery-preview.component';
-import { ZoomPosition } from "./zoomPosition";
+import { ZoomPosition } from './zoomPosition';
 
 @Component({
     selector: 'ngx-gallery-scroll-overview',
