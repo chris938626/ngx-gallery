@@ -1,8 +1,7 @@
-<div id="previewContainer" class="image-box"
-     [ngClass]="{ 'top-b': !edge?.top, 'bottom-b': !edge?.bottom, 'left-b': !edge?.left, 'right-b': !edge?.right }"
+<div id="preview-container" [ngStyle]="previewContainerStyles"
      #myBounds>
-    <div id="zoomContainer" ngDraggable class="image-detail" (started)="onStart($event)"
+    <div id="zoom-container" [ngStyle]="zoomContainerStyles" ngDraggable (started)="onStart($event)"
          (stopped)="onStop($event)"
-         (edge)="checkEdge($event)" [bounds]="myBounds" [inBounds]="inBounds">
+         (edge)="checkEdge($event)" [bounds]="myBounds" [inBounds]="true">
     </div>
 </div>

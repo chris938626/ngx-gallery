@@ -11,7 +11,6 @@ import { NgxGalleryComponent } from './ngx-gallery.component';
 import { NgxGalleryScrollOverviewComponent } from './ngx-gallery-scroll-overview/ngx-gallery-scroll-overview.component';
 import { AngularDraggableModule } from 'angular2-draggable';
 
-
 export * from './ngx-gallery.component';
 export * from './ngx-gallery-action.component';
 export * from './ngx-gallery-image.component';

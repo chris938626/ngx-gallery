@@ -13,7 +13,7 @@ import { SafeResourceUrl, DomSanitizer, SafeUrl, SafeStyle } from '@angular/plat
 
 import { NgxGalleryAction } from './ngx-gallery-action.model';
 import { NgxGalleryHelperService } from './ngx-gallery-helper.service';
-import { ZoomPosition } from "./ngx-gallery-scroll-overview/zoomPosition";
+import { ZoomPosition } from './ngx-gallery-scroll-overview/zoomPosition';
 
 @Component({
     selector: 'ngx-gallery-preview',
@@ -30,10 +30,10 @@ import { ZoomPosition } from "./ngx-gallery-scroll-overview/zoomPosition";
                 <ngx-gallery-action [icon]="'ngx-gallery-close ' + closeIcon" (onClick)="close()"></ngx-gallery-action>
                 <ngx-gallery-action *ngIf="zoomPosition" #galleryContainer (onZoomChanged) = "zoomChanged()" [zoomPosition] = "zoomPosition" [rectangleScroll]="rectangleScroll" [gallery]="this" ></ngx-gallery-action>
             </div>
-        </div> 
+        </div>
         <div class="ngx-spinner-wrapper ngx-gallery-center" [class.ngx-gallery-active]="showSpinner">
             <i class="ngx-gallery-icon ngx-gallery-spinner {{spinnerIcon}}" aria-hidden="true"></i>
-        </div> 
+        </div>
         <div class="ngx-gallery-preview-wrapper" (click)="closeOnClick && close()" (mouseup)="mouseUpHandler($event)" (mousemove)="mouseMoveHandler($event)" (touchend)="mouseUpHandler($event)" (touchmove)="mouseMoveHandler($event)">
             <div class="ngx-gallery-preview-img-wrapper">
             

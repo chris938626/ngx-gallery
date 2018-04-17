@@ -14,7 +14,6 @@ import { ZoomPosition } from './ngx-gallery-scroll-overview/zoomPosition';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgxGalleryActionComponent {
-
     @Input() icon: string;
     @Input() disabled = false;
     @Input() titleText = '';
