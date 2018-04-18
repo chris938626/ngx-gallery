@@ -9,7 +9,7 @@ import { ZoomPosition } from './ngx-gallery-scroll-overview/zoomPosition';
             aria-hidden="true"
             title="{{ titleText }}"
             (click)="handleClick($event)" >
-           <ngx-gallery-scroll-overview #scrollOverviewComponent (onZoomChanged)="zoomChanged()" [zoomPosition] = "zoomPosition" *ngIf="rectangleScroll"> </ngx-gallery-scroll-overview>
+           <ngx-gallery-scroll-overview #scrollOverviewComponent (onZoomChanged)="zoomChanged()" [zoomPosition] = "zoomPosition" *ngIf="showScrollOverview"> </ngx-gallery-scroll-overview>
         </div>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -17,7 +17,7 @@ export class NgxGalleryActionComponent {
     @Input() icon: string;
     @Input() disabled = false;
     @Input() titleText = '';
-    @Input() rectangleScroll: boolean;
+    @Input() showScrollOverview: boolean;
     @Input() zoomPosition: ZoomPosition;
     @Input() gallery: NgxGalleryPreviewComponent;
 

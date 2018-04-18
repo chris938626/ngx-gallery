@@ -28,7 +28,7 @@ import { ZoomPosition } from './ngx-gallery-scroll-overview/zoomPosition';
                 <ngx-gallery-action *ngIf="rotate" [icon]="rotateRightIcon" (onClick)="rotateRight()"></ngx-gallery-action>
                 <ngx-gallery-action *ngIf="fullscreen" [icon]="'ngx-gallery-fullscreen ' + fullscreenIcon" (onClick)="manageFullscreen()"></ngx-gallery-action>
                 <ngx-gallery-action [icon]="'ngx-gallery-close ' + closeIcon" (onClick)="close()"></ngx-gallery-action>
-                <ngx-gallery-action *ngIf="zoomPosition" #galleryContainer (onZoomChanged) = "zoomChanged()" [zoomPosition] = "zoomPosition" [rectangleScroll]="rectangleScroll" [gallery]="this" ></ngx-gallery-action>
+                <ngx-gallery-action *ngIf="zoomPosition" #galleryContainer (onZoomChanged) = "zoomChanged()" [zoomPosition] = "zoomPosition" [showScrollOverview]="showScrollOverview" [gallery]="this"></ngx-gallery-action>
             </div>
         </div>
         <div class="ngx-spinner-wrapper ngx-gallery-center" [class.ngx-gallery-active]="showSpinner">
@@ -37,7 +37,7 @@ import { ZoomPosition } from './ngx-gallery-scroll-overview/zoomPosition';
         <div class="ngx-gallery-preview-wrapper" (click)="closeOnClick && close()" (mouseup)="mouseUpHandler($event)" (mousemove)="mouseMoveHandler($event)" (touchend)="mouseUpHandler($event)" (touchmove)="mouseMoveHandler($event)">
             <div class="ngx-gallery-preview-img-wrapper">
             
-            <img #previewImage class="ngx-gallery-preview-img ngx-gallery-center" [src]="src ? src : '#'" (click)="$event.stopPropagation()" (mouseenter)="imageMouseEnter()" (mouseleave)="imageMouseLeave()" (mousedown)="mouseDownHandler($event)" (touchstart)="mouseDownHandler($event)" [class.ngx-gallery-active]="!loading" [class.animation]="animation" [class.ngx-gallery-grab]="canDragOnZoom()" [class.ngx-gallery-fullsize]="fullSize" [class.ngx-gallery-center-zoom]="rectangleScroll" [style.transform]="getTransform()" [style.left]="positionLeft + 'px'" [style.top]="positionTop + 'px'"/>
+            <img #previewImage class="ngx-gallery-preview-img ngx-gallery-center" [src]="src ? src : '#'" (click)="$event.stopPropagation()" (mouseenter)="imageMouseEnter()" (mouseleave)="imageMouseLeave()" (mousedown)="mouseDownHandler($event)" (touchstart)="mouseDownHandler($event)" [class.ngx-gallery-active]="!loading" [class.animation]="animation" [class.ngx-gallery-grab]="canDragOnZoom()" [class.ngx-gallery-fullsize]="fullSize" [class.ngx-gallery-center-zoom]="showScrollOverview" [style.transform]="getTransform()" [style.left]="positionLeft + 'px'" [style.top]="positionTop + 'px'"/>
             </div>
             <div class="ngx-gallery-preview-text" *ngIf="showDescription && description" [innerHTML]="description"></div>
         </div>
@@ -55,7 +55,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     zoomValue = 1;
     loading = false;
     rotateValue = 0;
-    rectangleScroll = false;
+    showScrollOverview = false;
     zoomPosition = new ZoomPosition();
 
     @Input() images: string[] | SafeResourceUrl[];
@@ -116,7 +116,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     zoomChanged() {
-        console.log(this.zoomPosition);
         this.positionLeft = this.zoomPosition.positionLeft;
         this.positionTop = this.zoomPosition.positionTop;
     }
@@ -189,7 +188,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
 
     showNext(): boolean {
         if (this.canShowNext()) {
-            this.rectangleScroll = false;
+            this.showScrollOverview = false;
             this.index++;
 
             if (this.index === this.images.length) {
@@ -205,7 +204,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
 
     showPrev(): void {
         if (this.canShowPrev()) {
-            this.rectangleScroll = false;
+            this.showScrollOverview = false;
             this.index--;
 
             if (this.index < 0) {
@@ -299,7 +298,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     canDragOnZoom() {
-        return (this.fullSize && this.rectangleScroll)|| (this.zoom && this.zoomValue > 1);
+        return (this.fullSize && this.showScrollOverview) || (this.zoom && this.zoomValue > 1);
     }
 
     mouseDownHandler(e): void {
@@ -438,9 +437,9 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         }
 
         if ( img.naturalHeight > window.innerHeight ){
-            this.rectangleScroll = true;
+            this.showScrollOverview = true;
         } else {
-            this.rectangleScroll = false;
+            this.showScrollOverview = false;
         }
         return true;
     }
