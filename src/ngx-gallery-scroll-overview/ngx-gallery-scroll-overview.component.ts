@@ -15,8 +15,7 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
 
     @Output() onZoomChanged = new EventEmitter();
     @Input() zoomPosition: ZoomPosition;
-
-    previewContainerStyles = {};
+    previewContainerStyles = {width: '', height: ''};
     zoomContainerStyles = {transform: '', width: '', height: ''};
 
     constructor() {
@@ -36,12 +35,12 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
 
         // scale the preview image
         this.previewContainerStyles["background-image"] = "url('" + img[0].getAttribute('src') + "')";
-        this.previewContainerStyles["height"] = (height / this.SCALE_FACTOR) + 'px';
-        this.previewContainerStyles["width"] = (width / this.SCALE_FACTOR) + 'px';
+        this.previewContainerStyles.height = (height / this.SCALE_FACTOR) + 'px';
+        this.previewContainerStyles.width = (width / this.SCALE_FACTOR) + 'px';
 
         //scale the zoom container
-        this.zoomContainerStyles["height"] = (window.innerHeight / this.SCALE_FACTOR) + 'px';
-        this.zoomContainerStyles["width"] = (window.innerWidth / this.SCALE_FACTOR) + 'px';
+        this.zoomContainerStyles.height = (window.innerHeight / this.SCALE_FACTOR) + 'px';
+        this.zoomContainerStyles.width = (window.innerWidth / this.SCALE_FACTOR) + 'px';
 
         // init
         this.initialLeft = this.zoomPosition.positionLeft;
