@@ -16,15 +16,8 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
     @Output() onZoomChanged = new EventEmitter();
     @Input() zoomPosition: ZoomPosition;
 
-    edge = {
-        top: true,
-        bottom: true,
-        left: true,
-        right: true
-    };
-
     previewContainerStyles = {};
-    zoomContainerStyles = {};
+    zoomContainerStyles = {transform: '', width: '', height: ''};
 
     constructor() {
 
@@ -33,8 +26,7 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
     public updateDetailZoom() {
         var topScaled = (this.initialTop - this.zoomPosition.positionTop) / this.SCALE_FACTOR;
         var leftScaled = (this.initialLeft - this.zoomPosition.positionLeft) / this.SCALE_FACTOR;
-        var transformString = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
-        this.zoomContainerStyles["transform"] = transformString;
+        this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
     }
 
     public updatePreviewScales() {
@@ -58,10 +50,6 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
 
     ngOnInit(): void {
         this.updatePreviewScales();
-    }
-
-    checkEdge(event) {
-        this.edge = event;
     }
 
     onStop(event) {

@@ -2,6 +2,6 @@
      #myBounds>
     <div id="zoom-container" [ngStyle]="zoomContainerStyles" ngDraggable (started)="onStart($event)"
          (stopped)="onStop($event)"
-         (edge)="checkEdge($event)" [bounds]="myBounds" [inBounds]="true">
+         [bounds]="myBounds" [inBounds]="true">
     </div>
 </div>
