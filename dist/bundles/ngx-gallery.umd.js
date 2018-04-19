@@ -1,15 +1,22 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/platform-browser')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/common', '@angular/platform-browser'], factory) :
-	(factory((global['ngx-gallery'] = {}),global.core,global.common,global.platformBrowser));
-}(this, (function (exports,core,common,platformBrowser) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/platform-browser'), require('angular2-draggable')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/common', '@angular/platform-browser', 'angular2-draggable'], factory) :
+	(factory((global['ngx-gallery'] = {}),global.core,global.common,global.platformBrowser,global.angular2Draggable));
+}(this, (function (exports,core,common,platformBrowser,angular2Draggable) { 'use strict';
 
 var NgxGalleryActionComponent = /** @class */ (function () {
     function NgxGalleryActionComponent() {
         this.disabled = false;
         this.titleText = '';
         this.onClick = new core.EventEmitter();
+        this.onZoomChanged = new core.EventEmitter();
     }
+    /**
+     * @return {?}
+     */
+    NgxGalleryActionComponent.prototype.zoomChanged = function () {
+        this.onZoomChanged.emit();
+    };
     /**
      * @param {?} event
      * @return {?}
@@ -24,7 +31,7 @@ var NgxGalleryActionComponent = /** @class */ (function () {
     NgxGalleryActionComponent.decorators = [
         { type: core.Component, args: [{
                     selector: 'ngx-gallery-action',
-                    template: "\n        <div class=\"ngx-gallery-icon\" [class.ngx-gallery-icon-disabled]=\"disabled\"\n            aria-hidden=\"true\"\n            title=\"{{ titleText }}\"\n            (click)=\"handleClick($event)\">\n                <i class=\"ngx-gallery-icon-content {{ icon }}\"></i>\n        </div>",
+                    template: "\n        <div class=\"ngx-gallery-icon {{ icon }}\" [class.ngx-gallery-icon-disabled]=\"disabled\"\n            aria-hidden=\"true\"\n            title=\"{{ titleText }}\"\n            (click)=\"handleClick($event)\" >\n           <ngx-gallery-scroll-overview #scrollOverviewComponent (onZoomChanged)=\"zoomChanged()\" [zoomPosition] = \"zoomPosition\" *ngIf=\"showScrollOverview\"> </ngx-gallery-scroll-overview>\n        </div>",
                     changeDetection: core.ChangeDetectionStrategy.OnPush
                 },] },
     ];
@@ -36,7 +43,12 @@ var NgxGalleryActionComponent = /** @class */ (function () {
         'icon': [{ type: core.Input },],
         'disabled': [{ type: core.Input },],
         'titleText': [{ type: core.Input },],
+        'showScrollOverview': [{ type: core.Input },],
+        'zoomPosition': [{ type: core.Input },],
+        'gallery': [{ type: core.Input },],
         'onClick': [{ type: core.Output },],
+        'onZoomChanged': [{ type: core.Output },],
+        'scrollOverviewComponent': [{ type: core.ViewChild, args: ['scrollOverviewComponent',] },],
     };
     return NgxGalleryActionComponent;
 }());
@@ -736,6 +748,12 @@ var NgxGalleryThumbnailsComponent = /** @class */ (function () {
     return NgxGalleryThumbnailsComponent;
 }());
 
+var ZoomPosition = /** @class */ (function () {
+    function ZoomPosition() {
+    }
+    return ZoomPosition;
+}());
+
 var NgxGalleryPreviewComponent = /** @class */ (function () {
     /**
      * @param {?} sanitization
@@ -752,6 +770,8 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         this.zoomValue = 1;
         this.loading = false;
         this.rotateValue = 0;
+        this.showScrollOverview = false;
+        this.zoomPosition = new ZoomPosition();
         this.onOpen = new core.EventEmitter();
         this.onClose = new core.EventEmitter();
         this.onActiveChange = new core.EventEmitter();
@@ -772,6 +792,13 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         if (changes['swipe']) {
             this.helperService.manageSwipe(this.swipe, this.elementRef, 'preview', function () { return _this.showNext(); }, function () { return _this.showPrev(); });
         }
+    };
+    /**
+     * @return {?}
+     */
+    NgxGalleryPreviewComponent.prototype.zoomChanged = function () {
+        this.positionLeft = this.zoomPosition.positionLeft;
+        this.positionTop = this.zoomPosition.positionTop;
     };
     /**
      * @param {?} e
@@ -858,6 +885,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      */
     NgxGalleryPreviewComponent.prototype.showNext = function () {
         if (this.canShowNext()) {
+            this.showScrollOverview = false;
             this.index++;
             if (this.index === this.images.length) {
                 this.index = 0;
@@ -874,6 +902,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      */
     NgxGalleryPreviewComponent.prototype.showPrev = function () {
         if (this.canShowPrev()) {
+            this.showScrollOverview = false;
             this.index--;
             if (this.index < 0) {
                 this.index = this.images.length - 1;
@@ -991,7 +1020,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      * @return {?}
      */
     NgxGalleryPreviewComponent.prototype.canDragOnZoom = function () {
-        return this.fullSize || (this.zoom && this.zoomValue > 1);
+        return (this.fullSize && this.showScrollOverview) || (this.zoom && this.zoomValue > 1);
     };
     /**
      * @param {?} e
@@ -1022,6 +1051,9 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         if (this.isMove) {
             this.positionLeft = this.initialLeft + (this.getClientX(e) - this.initialX);
             this.positionTop = this.initialTop + (this.getClientY(e) - this.initialY);
+            this.zoomPosition.positionLeft = this.positionLeft;
+            this.zoomPosition.positionTop = this.positionTop;
+            this.galleryContainer.scrollOverviewComponent.updateDetailZoom();
         }
     };
     /**
@@ -1042,9 +1074,11 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      * @return {?}
      */
     NgxGalleryPreviewComponent.prototype.resetPosition = function () {
-        if (this.zoom) {
+        if (this.zoom || this.fullSize) {
             this.positionLeft = 0;
             this.positionTop = 0;
+            this.zoomPosition.positionLeft = 0;
+            this.zoomPosition.positionTop = 0;
         }
     };
     /**
@@ -1163,13 +1197,19 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         if (typeof img.naturalWidth !== 'undefined' && img.naturalWidth === 0) {
             return false;
         }
+        if (img.naturalHeight > window.innerHeight) {
+            this.showScrollOverview = true;
+        }
+        else {
+            this.showScrollOverview = false;
+        }
         return true;
     };
     NgxGalleryPreviewComponent.decorators = [
         { type: core.Component, args: [{
                     selector: 'ngx-gallery-preview',
-                    template: "\n        <ngx-gallery-arrows (onPrevClick)=\"showPrev()\" (onNextClick)=\"showNext()\" [prevDisabled]=\"!canShowPrev()\" [nextDisabled]=\"!canShowNext()\" [arrowPrevIcon]=\"arrowPrevIcon\" [arrowNextIcon]=\"arrowNextIcon\"></ngx-gallery-arrows>\n        <div class=\"ngx-gallery-preview-top\">\n            <div class=\"ngx-gallery-preview-icons\">\n                <ngx-gallery-action *ngFor=\"let action of actions\" [icon]=\"action.icon\" [disabled]=\"action.disabled\" [titleText]=\"action.titleText\" (onClick)=\"action.onClick($event)\"></ngx-gallery-action>\n                <ngx-gallery-action *ngIf=\"zoom\" [icon]=\"zoomOutIcon\" [disabled]=\"!canZoomOut()\" (onClick)=\"zoomOut()\"></ngx-gallery-action>\n                <ngx-gallery-action *ngIf=\"zoom\" [icon]=\"zoomInIcon\" [disabled]=\"!canZoomIn()\" (onClick)=\"zoomIn()\"></ngx-gallery-action>\n                <ngx-gallery-action *ngIf=\"rotate\" [icon]=\"rotateLeftIcon\" (onClick)=\"rotateLeft()\"></ngx-gallery-action>\n                <ngx-gallery-action *ngIf=\"rotate\" [icon]=\"rotateRightIcon\" (onClick)=\"rotateRight()\"></ngx-gallery-action>\n                <ngx-gallery-action *ngIf=\"fullscreen\" [icon]=\"'ngx-gallery-fullscreen ' + fullscreenIcon\" (onClick)=\"manageFullscreen()\"></ngx-gallery-action>\n                <ngx-gallery-action [icon]=\"'ngx-gallery-close ' + closeIcon\" (onClick)=\"close()\"></ngx-gallery-action>\n            </div>\n        </div>\n        <div class=\"ngx-spinner-wrapper ngx-gallery-center\" [class.ngx-gallery-active]=\"showSpinner\">\n            <i class=\"ngx-gallery-icon ngx-gallery-spinner {{spinnerIcon}}\" aria-hidden=\"true\"></i>\n        </div>\n        <div class=\"ngx-gallery-preview-wrapper\" (click)=\"closeOnClick && close()\" (mouseup)=\"mouseUpHandler($event)\" (mousemove)=\"mouseMoveHandler($event)\" (touchend)=\"mouseUpHandler($event)\" (touchmove)=\"mouseMoveHandler($event)\">\n            <div class=\"ngx-gallery-preview-img-wrapper\">\n            \n                <img #previewImage class=\"ngx-gallery-preview-img ngx-gallery-center\" [src]=\"src ? src : '#'\" (click)=\"$event.stopPropagation()\" (mouseenter)=\"imageMouseEnter()\" (mouseleave)=\"imageMouseLeave()\" (mousedown)=\"mouseDownHandler($event)\" (touchstart)=\"mouseDownHandler($event)\" [class.ngx-gallery-active]=\"!loading\" [class.animation]=\"animation\" [class.ngx-gallery-grab]=\"canDragOnZoom()\" [class.ngx-gallery-fullsize]=\"fullSize\" [style.transform]=\"getTransform()\" [style.left]=\"positionLeft + 'px'\" [style.top]=\"positionTop + 'px'\"/>\n            </div>\n            <div class=\"ngx-gallery-preview-text\" *ngIf=\"showDescription && description\" [innerHTML]=\"description\"></div>\n        </div>\n    ",
-                    styles: [":host(.ngx-gallery-active) { width: 100%; height: 100%; position: fixed; left: 0; top: 0; background: rgba(0, 0, 0, 0.7); z-index: 10000; display: inline-block; } :host { display: none; } :host /deep/ .ngx-gallery-arrow { font-size: 50px; } .ngx-gallery-preview-img { opacity: 0; max-width: 90%; max-height: 90%; user-select: none; transition: transform .5s; } .ngx-gallery-preview-img.animation { transition: opacity 0.5s linear, transform .5s; } .ngx-gallery-preview-img.ngx-gallery-active { opacity: 1; } .ngx-gallery-preview-img.ngx-gallery-grab { cursor: grab; cursor: -webkit-grab; } .ngx-gallery-preview-img.ngx-gallery-fullsize { max-width: initial; max-height: initial; } .ngx-gallery-icon.ngx-gallery-spinner { font-size: 50px; left: 0; display: inline-block; } :host /deep/ .ngx-gallery-preview-top { position: absolute; width: 100%; user-select: none; } :host /deep/ .ngx-gallery-preview-icons { float: right; } :host /deep/ .ngx-gallery-preview-icons .ngx-gallery-icon { position: relative; margin-right: 10px; margin-top: 10px; font-size: 25px; cursor: pointer; } :host /deep/ .ngx-gallery-preview-icons .ngx-gallery-icon.ngx-gallery-icon-disabled { cursor: default; opacity: 0.4; } .ngx-spinner-wrapper { width: 50px; height: 50px; display: none; } .ngx-spinner-wrapper.ngx-gallery-active { display: inline-block; } .ngx-gallery-center { position: absolute; left: 0; right: 0; bottom: 0; margin: auto; top: 0; } .ngx-gallery-preview-text { width: 100%; background: rgba(0, 0, 0, 0.7); padding: 10px; text-align: center; color: white; font-size: 16px; flex: 0 1 auto; z-index: 10; } .ngx-gallery-preview-wrapper { width: 100%; height: 100%; display: flex; flex-flow: column; } .ngx-gallery-preview-img-wrapper { flex: 1 1 auto; position: relative; } "]
+                    template: "\n        <ngx-gallery-arrows (onPrevClick)=\"showPrev()\" (onNextClick)=\"showNext()\" [prevDisabled]=\"!canShowPrev()\" [nextDisabled]=\"!canShowNext()\" [arrowPrevIcon]=\"arrowPrevIcon\" [arrowNextIcon]=\"arrowNextIcon\"></ngx-gallery-arrows>\n        <div class=\"ngx-gallery-preview-top\">\n            <div class=\"ngx-gallery-preview-icons\">\n                <ngx-gallery-action *ngFor=\"let action of actions\" [icon]=\"action.icon\" [disabled]=\"action.disabled\" [titleText]=\"action.titleText\" (onClick)=\"action.onClick($event)\"></ngx-gallery-action>\n                <ngx-gallery-action *ngIf=\"zoom\" [icon]=\"zoomOutIcon\" [disabled]=\"!canZoomOut()\" (onClick)=\"zoomOut()\"></ngx-gallery-action>\n                <ngx-gallery-action *ngIf=\"zoom\" [icon]=\"zoomInIcon\" [disabled]=\"!canZoomIn()\" (onClick)=\"zoomIn()\"></ngx-gallery-action>\n                <ngx-gallery-action *ngIf=\"rotate\" [icon]=\"rotateLeftIcon\" (onClick)=\"rotateLeft()\"></ngx-gallery-action>\n                <ngx-gallery-action *ngIf=\"rotate\" [icon]=\"rotateRightIcon\" (onClick)=\"rotateRight()\"></ngx-gallery-action>\n                <ngx-gallery-action *ngIf=\"fullscreen\" [icon]=\"'ngx-gallery-fullscreen ' + fullscreenIcon\" (onClick)=\"manageFullscreen()\"></ngx-gallery-action>\n                <ngx-gallery-action [icon]=\"'ngx-gallery-close ' + closeIcon\" (onClick)=\"close()\"></ngx-gallery-action>\n                <ngx-gallery-action *ngIf=\"zoomPosition\" #galleryContainer (onZoomChanged) = \"zoomChanged()\" [zoomPosition] = \"zoomPosition\" [showScrollOverview]=\"showScrollOverview\" [gallery]=\"this\"></ngx-gallery-action>\n            </div>\n        </div>\n        <div class=\"ngx-spinner-wrapper ngx-gallery-center\" [class.ngx-gallery-active]=\"showSpinner\">\n            <i class=\"ngx-gallery-icon ngx-gallery-spinner {{spinnerIcon}}\" aria-hidden=\"true\"></i>\n        </div>\n        <div class=\"ngx-gallery-preview-wrapper\" (click)=\"closeOnClick && close()\" (mouseup)=\"mouseUpHandler($event)\" (mousemove)=\"mouseMoveHandler($event)\" (touchend)=\"mouseUpHandler($event)\" (touchmove)=\"mouseMoveHandler($event)\">\n            <div class=\"ngx-gallery-preview-img-wrapper\">\n            \n            <img #previewImage class=\"ngx-gallery-preview-img ngx-gallery-center\" [src]=\"src ? src : '#'\" (click)=\"$event.stopPropagation()\" (mouseenter)=\"imageMouseEnter()\" (mouseleave)=\"imageMouseLeave()\" (mousedown)=\"mouseDownHandler($event)\" (touchstart)=\"mouseDownHandler($event)\" [class.ngx-gallery-active]=\"!loading\" [class.animation]=\"animation\" [class.ngx-gallery-grab]=\"canDragOnZoom()\" [class.ngx-gallery-fullsize]=\"fullSize\" [class.ngx-gallery-center-zoom]=\"showScrollOverview\" [style.transform]=\"getTransform()\" [style.left]=\"positionLeft + 'px'\" [style.top]=\"positionTop + 'px'\"/>\n            </div>\n            <div class=\"ngx-gallery-preview-text\" *ngIf=\"showDescription && description\" [innerHTML]=\"description\"></div>\n        </div>\n    ",
+                    styles: [":host(.ngx-gallery-active) { width: 100%; height: 100%; position: fixed; left: 0; top: 0; background: rgba(0, 0, 0, 0.7); z-index: 10000; display: inline-block; } :host { display: none; } :host /deep/ .ngx-gallery-arrow { font-size: 50px; } .ngx-gallery-preview-img { opacity: 0; max-width: 90%; max-height: 90%; user-select: none; transition: transform .5s; } .ngx-gallery-preview-img.animation { transition: opacity 0.5s linear, transform .5s; } .ngx-gallery-preview-img.ngx-gallery-active { opacity: 1; } .ngx-gallery-preview-img.ngx-gallery-grab { cursor: grab; cursor: -webkit-grab; } .ngx-gallery-preview-img.ngx-gallery-fullsize { max-width: initial; max-height: initial; } .ngx-gallery-icon.ngx-gallery-spinner { font-size: 50px; left: 0; display: inline-block; } :host /deep/ .ngx-gallery-preview-top { position: absolute; width: 100%; user-select: none; } :host /deep/ .ngx-gallery-preview-icons { float: right; } :host /deep/ .ngx-gallery-preview-icons .ngx-gallery-icon { position: relative; margin-right: 10px; margin-top: 10px; font-size: 25px; cursor: pointer; } :host /deep/ .ngx-gallery-preview-icons .ngx-gallery-icon.ngx-gallery-icon-disabled { cursor: default; opacity: 0.4; } .ngx-spinner-wrapper { width: 50px; height: 50px; display: none; } .ngx-spinner-wrapper.ngx-gallery-active { display: inline-block; } .ngx-gallery-center { position: absolute; left: 0; right: 0; bottom: 0; margin: auto; top: 0; } .ngx-gallery-center.ngx-gallery-center-zoom { position: relative !important; } .ngx-gallery-preview-text { width: 100%; background: rgba(0, 0, 0, 0.7); padding: 10px; text-align: center; color: white; font-size: 16px; flex: 0 1 auto; z-index: 10; } .ngx-gallery-preview-wrapper { width: 100%; height: 100%; display: flex; flex-flow: column; } .ngx-gallery-preview-img-wrapper { flex: 1 1 auto; position: relative; } "]
                 },] },
     ];
     /**
@@ -1215,6 +1255,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         'onClose': [{ type: core.Output },],
         'onActiveChange': [{ type: core.Output },],
         'previewImage': [{ type: core.ViewChild, args: ['previewImage',] },],
+        'galleryContainer': [{ type: core.ViewChild, args: ['galleryContainer',] },],
         'onKeyDown': [{ type: core.HostListener, args: ['window:keydown', ['$event'],] },],
     };
     return NgxGalleryPreviewComponent;
@@ -1667,6 +1708,82 @@ var NgxGalleryComponent = /** @class */ (function () {
     return NgxGalleryComponent;
 }());
 
+var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
+    function NgxGalleryScrollOverviewComponent() {
+        this.SCALE_FACTOR = 8;
+        this.onZoomChanged = new core.EventEmitter();
+        this.previewContainerStyles = { width: '', height: '' };
+        this.zoomContainerStyles = { transform: '', width: '', height: '' };
+    }
+    /**
+     * @return {?}
+     */
+    NgxGalleryScrollOverviewComponent.prototype.updateDetailZoom = function () {
+        var /** @type {?} */ topScaled = (this.initialTop - this.zoomPosition.positionTop) / this.SCALE_FACTOR;
+        var /** @type {?} */ leftScaled = (this.initialLeft - this.zoomPosition.positionLeft) / this.SCALE_FACTOR;
+        this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
+    };
+    /**
+     * @return {?}
+     */
+    NgxGalleryScrollOverviewComponent.prototype.updatePreviewScales = function () {
+        var /** @type {?} */ img = document.getElementsByClassName('ngx-gallery-fullsize');
+        var /** @type {?} */ width = img[0].clientWidth;
+        var /** @type {?} */ height = img[0].clientHeight;
+        // scale the preview image
+        this.previewContainerStyles["background-image"] = "url('" + img[0].getAttribute('src') + "')";
+        this.previewContainerStyles.height = (height / this.SCALE_FACTOR) + 'px';
+        this.previewContainerStyles.width = (width / this.SCALE_FACTOR) + 'px';
+        //scale the zoom container
+        this.zoomContainerStyles.height = (window.innerHeight / this.SCALE_FACTOR) + 'px';
+        this.zoomContainerStyles.width = (window.innerWidth / this.SCALE_FACTOR) + 'px';
+        // init
+        this.initialLeft = this.zoomPosition.positionLeft;
+        this.initialTop = this.zoomPosition.positionTop;
+    };
+    /**
+     * @return {?}
+     */
+    NgxGalleryScrollOverviewComponent.prototype.ngOnInit = function () {
+        this.updatePreviewScales();
+    };
+    /**
+     * @param {?} event
+     * @return {?}
+     */
+    NgxGalleryScrollOverviewComponent.prototype.onStop = function (event) {
+        var /** @type {?} */ rect = event.getBoundingClientRect();
+        this.zoomPosition.positionLeft += (this.beforeZoomLeft - rect.left) * this.SCALE_FACTOR;
+        this.zoomPosition.positionTop += (this.beforeZoomTop - rect.top) * this.SCALE_FACTOR;
+        this.onZoomChanged.emit();
+    };
+    /**
+     * @param {?} event
+     * @return {?}
+     */
+    NgxGalleryScrollOverviewComponent.prototype.onStart = function (event) {
+        var /** @type {?} */ rect = event.getBoundingClientRect();
+        this.beforeZoomLeft = rect.left;
+        this.beforeZoomTop = rect.top;
+    };
+    NgxGalleryScrollOverviewComponent.decorators = [
+        { type: core.Component, args: [{
+                    selector: 'ngx-gallery-scroll-overview',
+                    template: "<div id=\"preview-container\" [ngStyle]=\"previewContainerStyles\" #myBounds> <div id=\"zoom-container\" [ngStyle]=\"zoomContainerStyles\" ngDraggable (started)=\"onStart($event)\" (stopped)=\"onStop($event)\" [bounds]=\"myBounds\" [inBounds]=\"true\"> </div> </div> ",
+                    styles: ["#preview-container { background-size: contain; position: absolute; top: 50vh; left: -300px; overflow: hidden; } #zoom-container { opacity: 0.5; padding: 0; background: black; cursor: move; } "]
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    NgxGalleryScrollOverviewComponent.ctorParameters = function () { return []; };
+    NgxGalleryScrollOverviewComponent.propDecorators = {
+        'onZoomChanged': [{ type: core.Output },],
+        'zoomPosition': [{ type: core.Input },],
+    };
+    return NgxGalleryScrollOverviewComponent;
+}());
+
 var NgxGalleryImage = /** @class */ (function () {
     /**
      * @param {?} obj
@@ -1709,7 +1826,8 @@ var NgxGalleryModule = /** @class */ (function () {
     NgxGalleryModule.decorators = [
         { type: core.NgModule, args: [{
                     imports: [
-                        common.CommonModule
+                        common.CommonModule,
+                        angular2Draggable.AngularDraggableModule
                     ],
                     declarations: [
                         NgxGalleryActionComponent,
@@ -1717,7 +1835,8 @@ var NgxGalleryModule = /** @class */ (function () {
                         NgxGalleryImageComponent,
                         NgxGalleryThumbnailsComponent,
                         NgxGalleryPreviewComponent,
-                        NgxGalleryComponent
+                        NgxGalleryComponent,
+                        NgxGalleryScrollOverviewComponent
                     ],
                     exports: [
                         NgxGalleryComponent
@@ -1751,6 +1870,7 @@ exports.NgxGalleryLayout = NgxGalleryLayout;
 exports.NgxGalleryOrder = NgxGalleryOrder;
 exports.NgxGalleryOrderedImage = NgxGalleryOrderedImage;
 exports.NgxGalleryAction = NgxGalleryAction;
+exports.NgxGalleryScrollOverviewComponent = NgxGalleryScrollOverviewComponent;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

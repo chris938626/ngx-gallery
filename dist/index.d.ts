@@ -14,6 +14,7 @@ export * from './ngx-gallery-layout.model';
 export * from './ngx-gallery-order.model';
 export * from './ngx-gallery-ordered-image.model';
 export * from './ngx-gallery-action.model';
+export * from './ngx-gallery-scroll-overview/ngx-gallery-scroll-overview.component';
 export declare class CustomHammerConfig extends HammerGestureConfig {
     overrides: any;
 }

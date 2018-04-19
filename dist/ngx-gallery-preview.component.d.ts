@@ -2,6 +2,7 @@ import { EventEmitter, OnChanges, SimpleChanges, ElementRef } from '@angular/cor
 import { SafeResourceUrl, DomSanitizer, SafeUrl, SafeStyle } from '@angular/platform-browser';
 import { NgxGalleryAction } from './ngx-gallery-action.model';
 import { NgxGalleryHelperService } from './ngx-gallery-helper.service';
+import { ZoomPosition } from './ngx-gallery-scroll-overview/zoomPosition';
 export declare class NgxGalleryPreviewComponent implements OnChanges {
     private sanitization;
     private elementRef;
@@ -15,6 +16,8 @@ export declare class NgxGalleryPreviewComponent implements OnChanges {
     zoomValue: number;
     loading: boolean;
     rotateValue: number;
+    showScrollOverview: boolean;
+    zoomPosition: ZoomPosition;
     images: string[] | SafeResourceUrl[];
     descriptions: string[];
     showDescription: boolean;
@@ -49,6 +52,7 @@ export declare class NgxGalleryPreviewComponent implements OnChanges {
     onClose: EventEmitter<{}>;
     onActiveChange: EventEmitter<number>;
     previewImage: ElementRef;
+    galleryContainer: any;
     private index;
     private isOpen;
     private timer;
@@ -59,6 +63,7 @@ export declare class NgxGalleryPreviewComponent implements OnChanges {
     private isMove;
     constructor(sanitization: DomSanitizer, elementRef: ElementRef, helperService: NgxGalleryHelperService);
     ngOnChanges(changes: SimpleChanges): void;
+    zoomChanged(): void;
     onKeyDown(e: any): void;
     open(index: number): void;
     close(): void;
