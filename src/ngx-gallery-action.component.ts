@@ -1,13 +1,15 @@
-import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { NgxGalleryPreviewComponent } from './';
+import { ZoomPosition } from './ngx-gallery-scroll-overview/zoomPosition';
 
 @Component({
     selector: 'ngx-gallery-action',
     template: `
-        <div class="ngx-gallery-icon" [class.ngx-gallery-icon-disabled]="disabled"
+        <div class="ngx-gallery-icon {{ icon }}" [class.ngx-gallery-icon-disabled]="disabled"
             aria-hidden="true"
             title="{{ titleText }}"
-            (click)="handleClick($event)">
-                <i class="ngx-gallery-icon-content {{ icon }}"></i>
+            (click)="handleClick($event)" >
+           <ngx-gallery-scroll-overview #scrollOverviewComponent (onZoomChanged)="zoomChanged()" [zoomPosition] = "zoomPosition" *ngIf="showScrollOverview"> </ngx-gallery-scroll-overview>
         </div>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -15,8 +17,18 @@ export class NgxGalleryActionComponent {
     @Input() icon: string;
     @Input() disabled = false;
     @Input() titleText = '';
+    @Input() showScrollOverview: boolean;
+    @Input() zoomPosition: ZoomPosition;
+    @Input() gallery: NgxGalleryPreviewComponent;
 
     @Output() onClick: EventEmitter<Event> = new EventEmitter();
+    @Output() onZoomChanged = new EventEmitter();
+
+    @ViewChild('scrollOverviewComponent') scrollOverviewComponent;
+
+    zoomChanged() {
+        this.onZoomChanged.emit();
+    }
 
     handleClick(event: Event) {
         if (!this.disabled) {
