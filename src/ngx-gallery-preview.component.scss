@@ -89,6 +89,9 @@
     bottom: 0;
     margin: auto;
     top: 0;
+    &.ngx-gallery-center-zoom {
+        position: relative !important;
+    }
 }
 
 .ngx-gallery-preview-text {

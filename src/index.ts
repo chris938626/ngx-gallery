@@ -8,6 +8,8 @@ import { NgxGalleryImageComponent } from './ngx-gallery-image.component';
 import { NgxGalleryThumbnailsComponent } from './ngx-gallery-thumbnails.component';
 import { NgxGalleryPreviewComponent } from './ngx-gallery-preview.component';
 import { NgxGalleryComponent } from './ngx-gallery.component';
+import { NgxGalleryScrollOverviewComponent } from './ngx-gallery-scroll-overview/ngx-gallery-scroll-overview.component';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 export * from './ngx-gallery.component';
 export * from './ngx-gallery-action.component';
@@ -24,7 +26,7 @@ export * from './ngx-gallery-layout.model';
 export * from './ngx-gallery-order.model';
 export * from './ngx-gallery-ordered-image.model';
 export * from './ngx-gallery-action.model';
-
+export * from './ngx-gallery-scroll-overview/ngx-gallery-scroll-overview.component';
 export class CustomHammerConfig extends HammerGestureConfig  {
     overrides = <any>{
         'pinch': { enable: false },
@@ -34,7 +36,8 @@ export class CustomHammerConfig extends HammerGestureConfig  {
 
 @NgModule({
     imports: [
-        CommonModule
+        CommonModule,
+        AngularDraggableModule
     ],
     declarations: [
         NgxGalleryActionComponent,
@@ -42,7 +45,9 @@ export class CustomHammerConfig extends HammerGestureConfig  {
         NgxGalleryImageComponent,
         NgxGalleryThumbnailsComponent,
         NgxGalleryPreviewComponent,
-        NgxGalleryComponent
+        NgxGalleryComponent,
+        NgxGalleryScrollOverviewComponent
+
     ],
     exports: [
         NgxGalleryComponent
