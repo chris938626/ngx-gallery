@@ -1196,7 +1196,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         if (typeof img.naturalWidth !== 'undefined' && img.naturalWidth === 0) {
             return false;
         }
-        if (img.naturalHeight > window.innerHeight) {
+        if (img.naturalHeight > window.innerHeight || img.naturalWidth > window.innerWidth) {
             this.showScrollOverview = true;
         }
         else {
@@ -1731,8 +1731,9 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         var /** @type {?} */ height = img[0].clientHeight;
         // scale the preview image
         this.previewContainerStyles["background-image"] = "url('" + img[0].getAttribute('src') + "')";
-        this.previewContainerStyles.height = (height / this.SCALE_FACTOR) + 'px';
-        this.previewContainerStyles.width = (width / this.SCALE_FACTOR) + 'px';
+        this.previewContainerStyles["background-size"] = (width / this.SCALE_FACTOR) + 'px ' + (height / this.SCALE_FACTOR) + 'px';
+        this.previewContainerStyles["min-height"] = (window.innerHeight / this.SCALE_FACTOR) + 10 + 'px';
+        this.previewContainerStyles["min-width"] = (window.innerWidth / this.SCALE_FACTOR) + 10 + 'px';
         //scale the zoom container
         this.zoomContainerStyles.height = (window.innerHeight / this.SCALE_FACTOR) + 'px';
         this.zoomContainerStyles.width = (window.innerWidth / this.SCALE_FACTOR) + 'px';
@@ -1752,6 +1753,11 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
      */
     NgxGalleryScrollOverviewComponent.prototype.onStop = function (event) {
         var /** @type {?} */ rect = event.getBoundingClientRect();
+        console.log("on stop");
+        console.log(rect.left);
+        console.log("on stop diffs");
+        console.log(this.beforeZoomLeft - rect.left);
+        console.log(this.beforeZoomTop - rect.top);
         this.zoomPosition.positionLeft += (this.beforeZoomLeft - rect.left) * this.SCALE_FACTOR;
         this.zoomPosition.positionTop += (this.beforeZoomTop - rect.top) * this.SCALE_FACTOR;
         this.onZoomChanged.emit();
@@ -1762,14 +1768,16 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
      */
     NgxGalleryScrollOverviewComponent.prototype.onStart = function (event) {
         var /** @type {?} */ rect = event.getBoundingClientRect();
+        console.log("on start");
+        console.log(rect.left);
         this.beforeZoomLeft = rect.left;
         this.beforeZoomTop = rect.top;
     };
     NgxGalleryScrollOverviewComponent.decorators = [
         { type: Component, args: [{
                     selector: 'ngx-gallery-scroll-overview',
-                    template: "<div id=\"preview-container\" [ngStyle]=\"previewContainerStyles\" #myBounds> <div id=\"zoom-container\" [ngStyle]=\"zoomContainerStyles\" ngDraggable (started)=\"onStart($event)\" (stopped)=\"onStop($event)\" [bounds]=\"myBounds\" [inBounds]=\"true\"> </div> </div> ",
-                    styles: ["#preview-container { background-size: contain; position: absolute; top: 50vh; left: -300px; overflow: hidden; } #zoom-container { opacity: 0.5; padding: 0; background: black; cursor: move; } "]
+                    template: "<div #myBounds id=\"preview-container\" [ngStyle]=\"previewContainerStyles\"> <div id=\"zoom-container\" [ngStyle]=\"zoomContainerStyles\" ngDraggable (started)=\"onStart($event)\" (stopped)=\"onStop($event)\" [bounds]=\"myBounds\" [inBounds]=\"true\"> </div> </div> ",
+                    styles: ["#preview-container { background-repeat: no-repeat; position: absolute; top: 50vh; left: -300px; overflow: hidden; } #bounds { width: 400px; height: 400px; background-color: blue; } #zoom-container { opacity: 0.5; padding: 0; background: black; cursor: move; } "]
                 },] },
     ];
     /**
