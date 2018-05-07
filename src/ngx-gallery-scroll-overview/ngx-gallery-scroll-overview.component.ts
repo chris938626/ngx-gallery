@@ -35,8 +35,9 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
 
         // scale the preview image
         this.previewContainerStyles["background-image"] = "url('" + img[0].getAttribute('src') + "')";
-        this.previewContainerStyles.height = (height / this.SCALE_FACTOR) + 'px';
-        this.previewContainerStyles.width = (width / this.SCALE_FACTOR) + 'px';
+        this.previewContainerStyles["background-size"] = (width / this.SCALE_FACTOR ) + 'px ' + (height / this.SCALE_FACTOR ) + 'px';
+        this.previewContainerStyles["min-height"] = (window.innerHeight / this.SCALE_FACTOR) + 10 + 'px';
+        this.previewContainerStyles["min-width"] = (window.innerWidth / this.SCALE_FACTOR) + 10 + 'px';
 
         //scale the zoom container
         this.zoomContainerStyles.height = (window.innerHeight / this.SCALE_FACTOR) + 'px';
@@ -52,7 +53,13 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
     }
 
     onStop(event) {
+
         var rect = event.getBoundingClientRect();
+        console.log("on stop")
+        console.log(rect.left);
+        console.log("on stop diffs")
+        console.log(this.beforeZoomLeft - rect.left);
+        console.log(this.beforeZoomTop - rect.top);
         this.zoomPosition.positionLeft += (this.beforeZoomLeft - rect.left) * this.SCALE_FACTOR;
         this.zoomPosition.positionTop += (this.beforeZoomTop - rect.top) * this.SCALE_FACTOR;
         this.onZoomChanged.emit();
@@ -60,6 +67,8 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
 
     onStart(event) {
         var rect = event.getBoundingClientRect();
+        console.log("on start")
+        console.log(rect.left);
         this.beforeZoomLeft = rect.left;
         this.beforeZoomTop = rect.top;
     }

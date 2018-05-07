@@ -1,5 +1,4 @@
-<div id="preview-container" [ngStyle]="previewContainerStyles"
-     #myBounds>
+<div #myBounds id="preview-container" [ngStyle]="previewContainerStyles">
     <div id="zoom-container" [ngStyle]="zoomContainerStyles" ngDraggable (started)="onStart($event)"
          (stopped)="onStop($event)"
          [bounds]="myBounds" [inBounds]="true">
