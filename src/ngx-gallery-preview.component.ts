@@ -436,7 +436,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             return false;
         }
 
-        if ( img.naturalHeight > window.innerHeight ){
+        if (img.naturalHeight > window.innerHeight || img.naturalWidth > window.innerWidth){
             this.showScrollOverview = true;
         } else {
             this.showScrollOverview = false;
