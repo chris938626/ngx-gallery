@@ -1734,7 +1734,9 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         this.previewContainerStyles["background-size"] = (width / this.SCALE_FACTOR) + 'px ' + (height / this.SCALE_FACTOR) + 'px';
         this.previewContainerStyles["min-height"] = (window.innerHeight / this.SCALE_FACTOR) + 10 + 'px';
         this.previewContainerStyles["min-width"] = (window.innerWidth / this.SCALE_FACTOR) + 10 + 'px';
-        //scale the zoom container
+        this.previewContainerStyles.width = (width / this.SCALE_FACTOR) + 'px';
+        this.previewContainerStyles.height = (height / this.SCALE_FACTOR) + 'px';
+        // scale the zoom container
         this.zoomContainerStyles.height = (window.innerHeight / this.SCALE_FACTOR) + 'px';
         this.zoomContainerStyles.width = (window.innerWidth / this.SCALE_FACTOR) + 'px';
         // init
