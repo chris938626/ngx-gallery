@@ -39,7 +39,7 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
         this.previewContainerStyles["min-height"] = (window.innerHeight / this.SCALE_FACTOR) + 10 + 'px';
         this.previewContainerStyles["min-width"] = (window.innerWidth / this.SCALE_FACTOR) + 10 + 'px';
 
-        //scale the zoom container
+        // scale the zoom container
         this.zoomContainerStyles.height = (window.innerHeight / this.SCALE_FACTOR) + 'px';
         this.zoomContainerStyles.width = (window.innerWidth / this.SCALE_FACTOR) + 'px';
 
