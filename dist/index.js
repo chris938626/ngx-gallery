@@ -1723,6 +1723,7 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         var /** @type {?} */ topScaled = (this.initialTop - this.zoomPosition.positionTop) / this.SCALE_FACTOR;
         var /** @type {?} */ leftScaled = (this.initialLeft - this.zoomPosition.positionLeft) / this.SCALE_FACTOR;
         this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
+        console.log(this.zoomContainerStyles.transform);
     };
     /**
      * @return {?}
@@ -1744,7 +1745,6 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         // init
         this.initialLeft = this.zoomPosition.positionLeft;
         this.initialTop = this.zoomPosition.positionTop;
-        this.updateDetailZoom();
     };
     /**
      * @return {?}
