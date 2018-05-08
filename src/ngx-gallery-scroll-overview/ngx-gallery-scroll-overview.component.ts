@@ -48,6 +48,8 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
         // init
         this.initialLeft = this.zoomPosition.positionLeft;
         this.initialTop = this.zoomPosition.positionTop;
+
+        this.updateDetailZoom();
     }
 
     ngOnInit(): void {
@@ -57,11 +59,6 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
     onStop(event) {
 
         var rect = event.getBoundingClientRect();
-        console.log("on stop")
-        console.log(rect.left);
-        console.log("on stop diffs")
-        console.log(this.beforeZoomLeft - rect.left);
-        console.log(this.beforeZoomTop - rect.top);
         this.zoomPosition.positionLeft += (this.beforeZoomLeft - rect.left) * this.SCALE_FACTOR;
         this.zoomPosition.positionTop += (this.beforeZoomTop - rect.top) * this.SCALE_FACTOR;
         this.onZoomChanged.emit();
