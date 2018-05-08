@@ -792,6 +792,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         if (changes['swipe']) {
             this.helperService.manageSwipe(this.swipe, this.elementRef, 'preview', function () { return _this.showNext(); }, function () { return _this.showPrev(); });
         }
+        this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
     };
     /**
      * @return {?}
@@ -1744,6 +1745,7 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         // init
         this.initialLeft = this.zoomPosition.positionLeft;
         this.initialTop = this.zoomPosition.positionTop;
+        this.updateDetailZoom();
     };
     /**
      * @return {?}
@@ -1757,11 +1759,6 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
      */
     NgxGalleryScrollOverviewComponent.prototype.onStop = function (event) {
         var /** @type {?} */ rect = event.getBoundingClientRect();
-        console.log("on stop");
-        console.log(rect.left);
-        console.log("on stop diffs");
-        console.log(this.beforeZoomLeft - rect.left);
-        console.log(this.beforeZoomTop - rect.top);
         this.zoomPosition.positionLeft += (this.beforeZoomLeft - rect.left) * this.SCALE_FACTOR;
         this.zoomPosition.positionTop += (this.beforeZoomTop - rect.top) * this.SCALE_FACTOR;
         this.onZoomChanged.emit();
