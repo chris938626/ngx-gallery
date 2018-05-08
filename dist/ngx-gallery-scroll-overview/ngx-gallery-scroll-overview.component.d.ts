@@ -19,6 +19,7 @@ export declare class NgxGalleryScrollOverviewComponent implements OnInit {
     };
     constructor();
     updateDetailZoom(): void;
+    resetDetailZoom(): void;
     updatePreviewScales(): void;
     ngOnInit(): void;
     onStop(event: any): void;

@@ -792,7 +792,6 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         if (changes['swipe']) {
             this.helperService.manageSwipe(this.swipe, this.elementRef, 'preview', function () { return _this.showNext(); }, function () { return _this.showPrev(); });
         }
-        this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
     };
     /**
      * @return {?}
@@ -832,6 +831,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         if (this.forceFullscreen) {
             this.manageFullscreen();
         }
+        this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
     };
     /**
      * @return {?}
@@ -1729,10 +1729,20 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
     /**
      * @return {?}
      */
+    NgxGalleryScrollOverviewComponent.prototype.resetDetailZoom = function () {
+        var /** @type {?} */ topScaled = 0;
+        var /** @type {?} */ leftScaled = 0;
+        this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
+    };
+    /**
+     * @return {?}
+     */
     NgxGalleryScrollOverviewComponent.prototype.updatePreviewScales = function () {
         var /** @type {?} */ img = document.getElementsByClassName('ngx-gallery-fullsize');
         var /** @type {?} */ width = img[0].clientWidth;
         var /** @type {?} */ height = img[0].clientHeight;
+        console.log(img);
+        console.log(img[0].getAttribute('src'));
         // scale the preview image
         this.previewContainerStyles["background-image"] = "url('" + img[0].getAttribute('src') + "')";
         this.previewContainerStyles["background-size"] = (width / this.SCALE_FACTOR) + 'px ' + (height / this.SCALE_FACTOR) + 'px';
