@@ -141,10 +141,10 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         this.index = index;
         this.isOpen = true;
         this.show(true);
-
         if (this.forceFullscreen) {
             this.manageFullscreen();
         }
+        setTimeout(() => this.galleryContainer.scrollOverviewComponent.updatePreviewScales(), 100);
     }
 
     close(): void {
