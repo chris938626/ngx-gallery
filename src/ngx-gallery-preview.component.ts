@@ -144,7 +144,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         if (this.forceFullscreen) {
             this.manageFullscreen();
         }
-        setTimeout(() => this.galleryContainer.scrollOverviewComponent.updatePreviewScales(), 100);
     }
 
     close(): void {
@@ -156,6 +155,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     imageMouseEnter(): void {
+        this.galleryContainer.scrollOverviewComponent.updatePreviewScales()
         if (this.autoPlay && this.autoPlayPauseOnHover) {
             this.stopAutoPlay();
         }
