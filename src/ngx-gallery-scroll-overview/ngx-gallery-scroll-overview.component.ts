@@ -26,6 +26,7 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
         var topScaled = (this.initialTop - this.zoomPosition.positionTop) / this.SCALE_FACTOR;
         var leftScaled = (this.initialLeft - this.zoomPosition.positionLeft) / this.SCALE_FACTOR;
         this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
+        console.log(this.zoomContainerStyles.transform);
     }
 
     public updatePreviewScales() {
@@ -48,8 +49,6 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
         // init
         this.initialLeft = this.zoomPosition.positionLeft;
         this.initialTop = this.zoomPosition.positionTop;
-
-        this.updateDetailZoom();
     }
 
     ngOnInit(): void {
