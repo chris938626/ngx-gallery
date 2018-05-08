@@ -823,6 +823,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      * @return {?}
      */
     NgxGalleryPreviewComponent.prototype.open = function (index) {
+        var _this = this;
         this.onOpen.emit();
         this.index = index;
         this.isOpen = true;
@@ -830,6 +831,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         if (this.forceFullscreen) {
             this.manageFullscreen();
         }
+        setTimeout(function () { return _this.galleryContainer.scrollOverviewComponent.updatePreviewScales(); }, 100);
     };
     /**
      * @return {?}
