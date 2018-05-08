@@ -113,6 +113,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             this.helperService.manageSwipe(this.swipe, this.elementRef,
             'preview', () => this.showNext(), () => this.showPrev());
         }
+        this.galleryContainer.scrollOverviewComponent.updatePreviewScales()
     }
 
     zoomChanged() {
