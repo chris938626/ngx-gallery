@@ -29,11 +29,18 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
         console.log(this.zoomContainerStyles.transform);
     }
 
+    public resetDetailZoom() {
+        var topScaled = 0;
+        var leftScaled = 0;
+        this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
+    }
+
     public updatePreviewScales() {
         var img = document.getElementsByClassName('ngx-gallery-fullsize');
         var width = img[0].clientWidth;
         var height = img[0].clientHeight;
-
+        console.log(img);
+        console.log(img[0].getAttribute('src'));
         // scale the preview image
         this.previewContainerStyles["background-image"] = "url('" + img[0].getAttribute('src') + "')";
         this.previewContainerStyles["background-size"] = (width / this.SCALE_FACTOR ) + 'px ' + (height / this.SCALE_FACTOR ) + 'px';

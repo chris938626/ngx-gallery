@@ -113,7 +113,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             this.helperService.manageSwipe(this.swipe, this.elementRef,
             'preview', () => this.showNext(), () => this.showPrev());
         }
-        this.galleryContainer.scrollOverviewComponent.updatePreviewScales()
     }
 
     zoomChanged() {
@@ -145,6 +144,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         if (this.forceFullscreen) {
             this.manageFullscreen();
         }
+        this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
     }
 
     close(): void {
@@ -156,7 +156,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     imageMouseEnter(): void {
-        this.galleryContainer.scrollOverviewComponent.updatePreviewScales()
+        this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
         if (this.autoPlay && this.autoPlayPauseOnHover) {
             this.stopAutoPlay();
         }
