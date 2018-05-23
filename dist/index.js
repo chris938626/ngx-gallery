@@ -830,9 +830,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         if (this.forceFullscreen) {
             this.manageFullscreen();
         }
-        if (this.galleryContainer.scrollOverviewComponent) {
-            this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
-        }
+        this.refreshScrollOverview();
         this.showNext();
     };
     /**
@@ -887,7 +885,6 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      * @return {?}
      */
     NgxGalleryPreviewComponent.prototype.showNext = function () {
-        var _this = this;
         if (this.canShowNext()) {
             //this.showScrollOverview = false;
             this.index++;
@@ -895,12 +892,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
                 this.index = 0;
             }
             this.show();
-            setTimeout(function () {
-                if (_this.galleryContainer.scrollOverviewComponent) {
-                    _this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
-                    _this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
-                }
-            }, 1000);
+            this.refreshScrollOverview();
             return true;
         }
         else {
@@ -910,8 +902,21 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
     /**
      * @return {?}
      */
-    NgxGalleryPreviewComponent.prototype.showPrev = function () {
+    NgxGalleryPreviewComponent.prototype.refreshScrollOverview = function () {
         var _this = this;
+        if (this.showScrollOverview) {
+            setTimeout(function () {
+                if (_this.galleryContainer.scrollOverviewComponent) {
+                    _this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+                    _this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+                }
+            }, 1000);
+        }
+    };
+    /**
+     * @return {?}
+     */
+    NgxGalleryPreviewComponent.prototype.showPrev = function () {
         if (this.canShowPrev()) {
             //this.showScrollOverview = false;
             this.index--;
@@ -919,12 +924,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
                 this.index = this.images.length - 1;
             }
             this.show();
-            setTimeout(function () {
-                if (_this.galleryContainer.scrollOverviewComponent) {
-                    _this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
-                    _this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
-                }
-            }, 1000);
+            this.refreshScrollOverview();
         }
     };
     /**
@@ -1208,7 +1208,6 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      * @return {?}
      */
     NgxGalleryPreviewComponent.prototype.isLoaded = function (img) {
-        console.log("is loaded");
         if (!img.complete) {
             return false;
         }
@@ -1216,7 +1215,6 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
             return false;
         }
         if (img.naturalHeight > window.innerHeight || img.naturalWidth > window.innerWidth) {
-            console.log("setting show overview to true");
             this.showScrollOverview = true;
         }
         else {
