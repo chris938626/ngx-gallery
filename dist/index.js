@@ -832,7 +832,6 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         }
         if (this.galleryContainer.scrollOverviewComponent) {
             this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
-            this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
         }
         this.showNext();
     };
@@ -849,9 +848,6 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      * @return {?}
      */
     NgxGalleryPreviewComponent.prototype.imageMouseEnter = function () {
-        if (this.galleryContainer.scrollOverviewComponent) {
-            this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
-        }
         if (this.autoPlay && this.autoPlayPauseOnHover) {
             this.stopAutoPlay();
         }
@@ -1732,6 +1728,10 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
      * @return {?}
      */
     NgxGalleryScrollOverviewComponent.prototype.updateDetailZoom = function () {
+        console.log("update detail zoom");
+        console.log(this.initialTop - this.zoomPosition.positionTop);
+        if (this.initialTop - this.zoomPosition.positionTop == 0)
+            return;
         var /** @type {?} */ topScaled = (this.initialTop - this.zoomPosition.positionTop) / this.SCALE_FACTOR;
         var /** @type {?} */ leftScaled = (this.initialLeft - this.zoomPosition.positionLeft) / this.SCALE_FACTOR;
         this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
@@ -1781,8 +1781,6 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
      */
     NgxGalleryScrollOverviewComponent.prototype.onStart = function (event) {
         var /** @type {?} */ rect = event.getBoundingClientRect();
-        console.log("on start");
-        console.log(rect.left);
         this.beforeZoomLeft = rect.left;
         this.beforeZoomTop = rect.top;
     };
