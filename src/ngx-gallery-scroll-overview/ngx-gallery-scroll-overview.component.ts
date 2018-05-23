@@ -23,6 +23,9 @@ export class NgxGalleryScrollOverviewComponent {
     }
 
     public updateDetailZoom() {
+        console.log ("update detail zoom");
+        console.log(this.initialTop - this.zoomPosition.positionTop);
+        if (this.initialTop - this.zoomPosition.positionTop==0)return;
         var topScaled = (this.initialTop - this.zoomPosition.positionTop) / this.SCALE_FACTOR;
         var leftScaled = (this.initialLeft - this.zoomPosition.positionLeft) / this.SCALE_FACTOR;
         this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
@@ -57,7 +60,6 @@ export class NgxGalleryScrollOverviewComponent {
     }
 
     onStop(event) {
-
         var rect = event.getBoundingClientRect();
         this.zoomPosition.positionLeft += (this.beforeZoomLeft - rect.left) * this.SCALE_FACTOR;
         this.zoomPosition.positionTop += (this.beforeZoomTop - rect.top) * this.SCALE_FACTOR;
@@ -66,8 +68,6 @@ export class NgxGalleryScrollOverviewComponent {
 
     onStart(event) {
         var rect = event.getBoundingClientRect();
-        console.log("on start")
-        console.log(rect.left);
         this.beforeZoomLeft = rect.left;
         this.beforeZoomTop = rect.top;
     }
