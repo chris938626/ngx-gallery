@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, OnChanges } from '@angular/core';
 import { ZoomPosition } from './zoomPosition';
 
 @Component({
@@ -6,7 +6,7 @@ import { ZoomPosition } from './zoomPosition';
     templateUrl: './ngx-gallery-scroll-overview.component.html',
     styleUrls: ['./ngx-gallery-scroll-overview.component.scss']
 })
-export class NgxGalleryScrollOverviewComponent implements OnInit {
+export class NgxGalleryScrollOverviewComponent {
     private beforeZoomLeft: number;
     private beforeZoomTop: number;
     private initialLeft: number;
@@ -26,7 +26,6 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
         var topScaled = (this.initialTop - this.zoomPosition.positionTop) / this.SCALE_FACTOR;
         var leftScaled = (this.initialLeft - this.zoomPosition.positionLeft) / this.SCALE_FACTOR;
         this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
-        console.log(this.zoomContainerStyles.transform);
     }
 
     public resetDetailZoom() {
@@ -39,15 +38,14 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
         var img = document.getElementsByClassName('ngx-gallery-fullsize');
         var width = img[0].clientWidth;
         var height = img[0].clientHeight;
-        console.log(img);
-        console.log(img[0].getAttribute('src'));
         // scale the preview image
         this.previewContainerStyles["background-image"] = "url('" + img[0].getAttribute('src') + "')";
         this.previewContainerStyles["background-size"] = (width / this.SCALE_FACTOR ) + 'px ' + (height / this.SCALE_FACTOR ) + 'px';
         this.previewContainerStyles["min-height"] = (window.innerHeight / this.SCALE_FACTOR) + 10 + 'px';
         this.previewContainerStyles["min-width"] = (window.innerWidth / this.SCALE_FACTOR) + 10 + 'px';
+        this.previewContainerStyles["left"] = -1 * (window.innerWidth / this.SCALE_FACTOR) + 'px';
         this.previewContainerStyles.width = (width / this.SCALE_FACTOR) + 'px'
-        this.previewContainerStyles.height = (height / this.SCALE_FACTOR)+ 'px';
+        this.previewContainerStyles.height = (height / this.SCALE_FACTOR) + 'px';
 
         // scale the zoom container
         this.zoomContainerStyles.height = (window.innerHeight / this.SCALE_FACTOR) + 'px';
@@ -56,10 +54,6 @@ export class NgxGalleryScrollOverviewComponent implements OnInit {
         // init
         this.initialLeft = this.zoomPosition.positionLeft;
         this.initialTop = this.zoomPosition.positionTop;
-    }
-
-    ngOnInit(): void {
-        this.updatePreviewScales();
     }
 
     onStop(event) {

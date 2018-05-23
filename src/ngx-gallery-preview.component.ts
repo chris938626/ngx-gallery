@@ -55,7 +55,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     zoomValue = 1;
     loading = false;
     rotateValue = 0;
-    showScrollOverview = false;
+    showScrollOverview = true;
     zoomPosition = new ZoomPosition();
 
     @Input() images: string[] | SafeResourceUrl[];
@@ -144,7 +144,12 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         if (this.forceFullscreen) {
             this.manageFullscreen();
         }
-        this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+
+        if (this.galleryContainer.scrollOverviewComponent) {
+            this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+            this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+        }
+        this.showNext();
     }
 
     close(): void {
@@ -156,7 +161,10 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     imageMouseEnter(): void {
-        this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+        if (this.galleryContainer.scrollOverviewComponent) {
+            this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+            this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+        }
         if (this.autoPlay && this.autoPlayPauseOnHover) {
             this.stopAutoPlay();
         }
@@ -189,7 +197,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
 
     showNext(): boolean {
         if (this.canShowNext()) {
-            this.showScrollOverview = false;
+            //this.showScrollOverview = false;
             this.index++;
 
             if (this.index === this.images.length) {
@@ -205,7 +213,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
 
     showPrev(): void {
         if (this.canShowPrev()) {
-            this.showScrollOverview = false;
+            //this.showScrollOverview = false;
             this.index--;
 
             if (this.index < 0) {
@@ -429,6 +437,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     private isLoaded(img): boolean {
+        console.log("is loaded")
         if (!img.complete) {
             return false;
         }
@@ -438,9 +447,14 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         }
 
         if (img.naturalHeight > window.innerHeight || img.naturalWidth > window.innerWidth){
+            console.log("setting show overview to true");
             this.showScrollOverview = true;
         } else {
             this.showScrollOverview = false;
+        }
+        if (this.galleryContainer.scrollOverviewComponent) {
+            this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+            this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
         }
         return true;
     }
