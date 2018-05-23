@@ -106,12 +106,13 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     private isMove = false;
 
     constructor(private sanitization: DomSanitizer,
-        private elementRef: ElementRef, private helperService: NgxGalleryHelperService) {}
+                private elementRef: ElementRef, private helperService: NgxGalleryHelperService) {
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['swipe']) {
             this.helperService.manageSwipe(this.swipe, this.elementRef,
-            'preview', () => this.showNext(), () => this.showPrev());
+                'preview', () => this.showNext(), () => this.showPrev());
         }
     }
 
@@ -145,9 +146,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             this.manageFullscreen();
         }
 
-        if (this.galleryContainer.scrollOverviewComponent) {
-            this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
-        }
+        this.refreshScrollOverview();
         this.showNext();
     }
 
@@ -200,17 +199,22 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             }
 
             this.show();
-            setTimeout(() =>{
+            this.refreshScrollOverview();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private refreshScrollOverview() {
+        if (this.showScrollOverview) {
+            setTimeout(() => {
                 if (this.galleryContainer.scrollOverviewComponent) {
                     this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
-
                     this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
                 }
 
             }, 1000)
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -224,14 +228,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             }
 
             this.show();
-            setTimeout(() =>{
-                if (this.galleryContainer.scrollOverviewComponent) {
-                    this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
-
-                    this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
-                }
-
-            }, 1000)
+            this.refreshScrollOverview();
         }
     }
 
@@ -448,7 +445,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
     }
 
     private isLoaded(img): boolean {
-        console.log("is loaded")
         if (!img.complete) {
             return false;
         }
@@ -457,8 +453,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             return false;
         }
 
-        if (img.naturalHeight > window.innerHeight || img.naturalWidth > window.innerWidth){
-            console.log("setting show overview to true");
+        if (img.naturalHeight > window.innerHeight || img.naturalWidth > window.innerWidth) {
             this.showScrollOverview = true;
         } else {
             this.showScrollOverview = false;
