@@ -887,6 +887,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      * @return {?}
      */
     NgxGalleryPreviewComponent.prototype.showNext = function () {
+        var _this = this;
         if (this.canShowNext()) {
             //this.showScrollOverview = false;
             this.index++;
@@ -894,6 +895,12 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
                 this.index = 0;
             }
             this.show();
+            setTimeout(function () {
+                if (_this.galleryContainer.scrollOverviewComponent) {
+                    _this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+                    _this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+                }
+            }, 1000);
             return true;
         }
         else {
@@ -904,6 +911,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      * @return {?}
      */
     NgxGalleryPreviewComponent.prototype.showPrev = function () {
+        var _this = this;
         if (this.canShowPrev()) {
             //this.showScrollOverview = false;
             this.index--;
@@ -911,6 +919,12 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
                 this.index = this.images.length - 1;
             }
             this.show();
+            setTimeout(function () {
+                if (_this.galleryContainer.scrollOverviewComponent) {
+                    _this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+                    _this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+                }
+            }, 1000);
         }
     };
     /**
@@ -1742,7 +1756,9 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
     NgxGalleryScrollOverviewComponent.prototype.resetDetailZoom = function () {
         var /** @type {?} */ topScaled = 0;
         var /** @type {?} */ leftScaled = 0;
-        this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
+        document.getElementById("zoom-container").style.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
+        // does not work here:
+        // this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
     };
     /**
      * @return {?}
