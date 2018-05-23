@@ -1,6 +1,6 @@
-import { EventEmitter, OnInit } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 import { ZoomPosition } from './zoomPosition';
-export declare class NgxGalleryScrollOverviewComponent implements OnInit {
+export declare class NgxGalleryScrollOverviewComponent {
     private beforeZoomLeft;
     private beforeZoomTop;
     private initialLeft;
@@ -21,7 +21,6 @@ export declare class NgxGalleryScrollOverviewComponent implements OnInit {
     updateDetailZoom(): void;
     resetDetailZoom(): void;
     updatePreviewScales(): void;
-    ngOnInit(): void;
     onStop(event: any): void;
     onStart(event: any): void;
 }

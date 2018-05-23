@@ -770,7 +770,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         this.zoomValue = 1;
         this.loading = false;
         this.rotateValue = 0;
-        this.showScrollOverview = false;
+        this.showScrollOverview = true;
         this.zoomPosition = new ZoomPosition();
         this.onOpen = new core.EventEmitter();
         this.onClose = new core.EventEmitter();
@@ -831,7 +831,11 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         if (this.forceFullscreen) {
             this.manageFullscreen();
         }
-        this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+        if (this.galleryContainer.scrollOverviewComponent) {
+            this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+            this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+        }
+        this.showNext();
     };
     /**
      * @return {?}
@@ -846,7 +850,10 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      * @return {?}
      */
     NgxGalleryPreviewComponent.prototype.imageMouseEnter = function () {
-        this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+        if (this.galleryContainer.scrollOverviewComponent) {
+            this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+            this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+        }
         if (this.autoPlay && this.autoPlayPauseOnHover) {
             this.stopAutoPlay();
         }
@@ -887,7 +894,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      */
     NgxGalleryPreviewComponent.prototype.showNext = function () {
         if (this.canShowNext()) {
-            this.showScrollOverview = false;
+            //this.showScrollOverview = false;
             this.index++;
             if (this.index === this.images.length) {
                 this.index = 0;
@@ -904,7 +911,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      */
     NgxGalleryPreviewComponent.prototype.showPrev = function () {
         if (this.canShowPrev()) {
-            this.showScrollOverview = false;
+            //this.showScrollOverview = false;
             this.index--;
             if (this.index < 0) {
                 this.index = this.images.length - 1;
@@ -1193,6 +1200,7 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
      * @return {?}
      */
     NgxGalleryPreviewComponent.prototype.isLoaded = function (img) {
+        console.log("is loaded");
         if (!img.complete) {
             return false;
         }
@@ -1200,10 +1208,15 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
             return false;
         }
         if (img.naturalHeight > window.innerHeight || img.naturalWidth > window.innerWidth) {
+            console.log("setting show overview to true");
             this.showScrollOverview = true;
         }
         else {
             this.showScrollOverview = false;
+        }
+        if (this.galleryContainer.scrollOverviewComponent) {
+            this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+            this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
         }
         return true;
     };
@@ -1724,7 +1737,6 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         var /** @type {?} */ topScaled = (this.initialTop - this.zoomPosition.positionTop) / this.SCALE_FACTOR;
         var /** @type {?} */ leftScaled = (this.initialLeft - this.zoomPosition.positionLeft) / this.SCALE_FACTOR;
         this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
-        console.log(this.zoomContainerStyles.transform);
     };
     /**
      * @return {?}
@@ -1741,13 +1753,12 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         var /** @type {?} */ img = document.getElementsByClassName('ngx-gallery-fullsize');
         var /** @type {?} */ width = img[0].clientWidth;
         var /** @type {?} */ height = img[0].clientHeight;
-        console.log(img);
-        console.log(img[0].getAttribute('src'));
         // scale the preview image
         this.previewContainerStyles["background-image"] = "url('" + img[0].getAttribute('src') + "')";
         this.previewContainerStyles["background-size"] = (width / this.SCALE_FACTOR) + 'px ' + (height / this.SCALE_FACTOR) + 'px';
         this.previewContainerStyles["min-height"] = (window.innerHeight / this.SCALE_FACTOR) + 10 + 'px';
         this.previewContainerStyles["min-width"] = (window.innerWidth / this.SCALE_FACTOR) + 10 + 'px';
+        this.previewContainerStyles["left"] = -1 * (window.innerWidth / this.SCALE_FACTOR) + 'px';
         this.previewContainerStyles.width = (width / this.SCALE_FACTOR) + 'px';
         this.previewContainerStyles.height = (height / this.SCALE_FACTOR) + 'px';
         // scale the zoom container
@@ -1756,12 +1767,6 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         // init
         this.initialLeft = this.zoomPosition.positionLeft;
         this.initialTop = this.zoomPosition.positionTop;
-    };
-    /**
-     * @return {?}
-     */
-    NgxGalleryScrollOverviewComponent.prototype.ngOnInit = function () {
-        this.updatePreviewScales();
     };
     /**
      * @param {?} event
@@ -1788,7 +1793,7 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         { type: core.Component, args: [{
                     selector: 'ngx-gallery-scroll-overview',
                     template: "<div #myBounds id=\"preview-container\" [ngStyle]=\"previewContainerStyles\"> <div id=\"zoom-container\" [ngStyle]=\"zoomContainerStyles\" ngDraggable (started)=\"onStart($event)\" (stopped)=\"onStop($event)\" [bounds]=\"myBounds\" [inBounds]=\"true\"> </div> </div> ",
-                    styles: ["#preview-container { background-repeat: no-repeat; position: absolute; top: 50vh; left: -300px; overflow: hidden; } #bounds { width: 400px; height: 400px; background-color: blue; } #zoom-container { opacity: 0.5; padding: 0; background: black; cursor: move; } "]
+                    styles: ["#preview-container { background-repeat: no-repeat; position: absolute; border-bottom: 0; left: -300px; overflow: hidden; bottom: -80vh; } #bounds { width: 400px; height: 400px; background-color: blue; } #zoom-container { opacity: 0.5; padding: 0; background: black; cursor: move; } "]
                 },] },
     ];
     /**
