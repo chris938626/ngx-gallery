@@ -162,7 +162,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
 
     imageMouseEnter(): void {
         if (this.galleryContainer.scrollOverviewComponent) {
-            this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
             this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
         }
         if (this.autoPlay && this.autoPlayPauseOnHover) {
