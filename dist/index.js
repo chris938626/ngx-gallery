@@ -1757,7 +1757,6 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         this.previewContainerStyles["background-size"] = (width / this.SCALE_FACTOR) + 'px ' + (height / this.SCALE_FACTOR) + 'px';
         this.previewContainerStyles["min-height"] = (window.innerHeight / this.SCALE_FACTOR) + 10 + 'px';
         this.previewContainerStyles["min-width"] = (window.innerWidth / this.SCALE_FACTOR) + 10 + 'px';
-        this.previewContainerStyles["left"] = -1 * (window.innerWidth / this.SCALE_FACTOR) + 'px';
         this.previewContainerStyles.width = (width / this.SCALE_FACTOR) + 'px';
         this.previewContainerStyles.height = (height / this.SCALE_FACTOR) + 'px';
         // scale the zoom container
@@ -1792,7 +1791,7 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         { type: Component, args: [{
                     selector: 'ngx-gallery-scroll-overview',
                     template: "<div #myBounds id=\"preview-container\" [ngStyle]=\"previewContainerStyles\"> <div id=\"zoom-container\" [ngStyle]=\"zoomContainerStyles\" ngDraggable (started)=\"onStart($event)\" (stopped)=\"onStop($event)\" [bounds]=\"myBounds\" [inBounds]=\"true\"> </div> </div> ",
-                    styles: ["#preview-container { background-repeat: no-repeat; position: absolute; border-bottom: 0; left: -300px; overflow: hidden; bottom: -80vh; } #bounds { width: 400px; height: 400px; background-color: blue; } #zoom-container { opacity: 0.5; padding: 0; background: black; cursor: move; } "]
+                    styles: ["#preview-container { background-repeat: no-repeat; position: absolute; border-bottom: 0; left: -15vw; overflow: hidden; bottom: -80vh; } #bounds { width: 400px; height: 400px; background-color: blue; } #zoom-container { opacity: 0.5; padding: 0; background: black; cursor: move; } "]
                 },] },
     ];
     /**
