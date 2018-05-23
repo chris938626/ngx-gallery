@@ -43,7 +43,7 @@ export class NgxGalleryScrollOverviewComponent {
         this.previewContainerStyles["background-size"] = (width / this.SCALE_FACTOR ) + 'px ' + (height / this.SCALE_FACTOR ) + 'px';
         this.previewContainerStyles["min-height"] = (window.innerHeight / this.SCALE_FACTOR) + 10 + 'px';
         this.previewContainerStyles["min-width"] = (window.innerWidth / this.SCALE_FACTOR) + 10 + 'px';
-        this.previewContainerStyles["left"] = -1 * (window.innerWidth / this.SCALE_FACTOR) + 'px';
+
         this.previewContainerStyles.width = (width / this.SCALE_FACTOR) + 'px'
         this.previewContainerStyles.height = (height / this.SCALE_FACTOR) + 'px';
 
