@@ -34,7 +34,9 @@ export class NgxGalleryScrollOverviewComponent {
     public resetDetailZoom() {
         var topScaled = 0;
         var leftScaled = 0;
-        this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
+        document.getElementById("zoom-container").style.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
+        // does not work here:
+        // this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
     }
 
     public updatePreviewScales() {

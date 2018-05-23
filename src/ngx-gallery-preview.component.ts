@@ -200,6 +200,14 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             }
 
             this.show();
+            setTimeout(() =>{
+                if (this.galleryContainer.scrollOverviewComponent) {
+                    this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+
+                    this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+                }
+
+            }, 1000)
             return true;
         } else {
             return false;
@@ -216,6 +224,14 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             }
 
             this.show();
+            setTimeout(() =>{
+                if (this.galleryContainer.scrollOverviewComponent) {
+                    this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+
+                    this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+                }
+
+            }, 1000)
         }
     }
 
