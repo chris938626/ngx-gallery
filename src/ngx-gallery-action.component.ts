@@ -10,8 +10,7 @@ import { ZoomPosition } from './ngx-gallery-scroll-overview/zoomPosition';
             title="{{ titleText }}"
             (click)="handleClick($event)" >
            <ngx-gallery-scroll-overview #scrollOverviewComponent (onZoomChanged)="zoomChanged()" [zoomPosition] = "zoomPosition" *ngIf="showScrollOverview"> </ngx-gallery-scroll-overview>
-        </div>`,
-    changeDetection: ChangeDetectionStrategy.OnPush
+        </div>`
 })
 export class NgxGalleryActionComponent {
     @Input() icon: string;
