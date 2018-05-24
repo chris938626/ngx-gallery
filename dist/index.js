@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, HostListener, Injectable, Input, NgModule, Output, Renderer, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Injectable, Input, NgModule, Output, Renderer, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { AngularDraggableModule } from 'angular2-draggable';
@@ -30,8 +30,7 @@ var NgxGalleryActionComponent = /** @class */ (function () {
     NgxGalleryActionComponent.decorators = [
         { type: Component, args: [{
                     selector: 'ngx-gallery-action',
-                    template: "\n        <div class=\"ngx-gallery-icon {{ icon }}\" [class.ngx-gallery-icon-disabled]=\"disabled\"\n            aria-hidden=\"true\"\n            title=\"{{ titleText }}\"\n            (click)=\"handleClick($event)\" >\n           <ngx-gallery-scroll-overview #scrollOverviewComponent (onZoomChanged)=\"zoomChanged()\" [zoomPosition] = \"zoomPosition\" *ngIf=\"showScrollOverview\"> </ngx-gallery-scroll-overview>\n        </div>",
-                    changeDetection: ChangeDetectionStrategy.OnPush
+                    template: "\n        <div class=\"ngx-gallery-icon {{ icon }}\" [class.ngx-gallery-icon-disabled]=\"disabled\"\n            aria-hidden=\"true\"\n            title=\"{{ titleText }}\"\n            (click)=\"handleClick($event)\" >\n           <ngx-gallery-scroll-overview #scrollOverviewComponent (onZoomChanged)=\"zoomChanged()\" [zoomPosition] = \"zoomPosition\" *ngIf=\"showScrollOverview\"> </ngx-gallery-scroll-overview>\n        </div>"
                 },] },
     ];
     /**
