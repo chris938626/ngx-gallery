@@ -23,8 +23,6 @@ export class NgxGalleryScrollOverviewComponent {
     }
 
     public updateDetailZoom() {
-        console.log ("update detail zoom");
-        console.log(this.initialTop - this.zoomPosition.positionTop);
         if (this.initialTop - this.zoomPosition.positionTop==0)return;
         var topScaled = (this.initialTop - this.zoomPosition.positionTop) / this.SCALE_FACTOR;
         var leftScaled = (this.initialLeft - this.zoomPosition.positionLeft) / this.SCALE_FACTOR;
