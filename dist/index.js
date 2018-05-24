@@ -1739,8 +1739,6 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
      * @return {?}
      */
     NgxGalleryScrollOverviewComponent.prototype.updateDetailZoom = function () {
-        console.log("update detail zoom");
-        console.log(this.initialTop - this.zoomPosition.positionTop);
         if (this.initialTop - this.zoomPosition.positionTop == 0)
             return;
         var /** @type {?} */ topScaled = (this.initialTop - this.zoomPosition.positionTop) / this.SCALE_FACTOR;
