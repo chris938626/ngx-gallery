@@ -20,7 +20,7 @@ export declare class NgxGalleryScrollOverviewComponent {
     constructor();
     updateDetailZoom(): void;
     resetDetailZoom(): void;
-    updatePreviewScales(): void;
+    updatePreviewScales(url: any): void;
     onStop(event: any): void;
     onStart(event: any): void;
 }

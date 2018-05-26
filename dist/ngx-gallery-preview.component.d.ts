@@ -72,7 +72,6 @@ export declare class NgxGalleryPreviewComponent implements OnChanges {
     startAutoPlay(): void;
     stopAutoPlay(): void;
     showNext(): boolean;
-    private refreshScrollOverview();
     showPrev(): void;
     canShowNext(): boolean;
     canShowPrev(): boolean;

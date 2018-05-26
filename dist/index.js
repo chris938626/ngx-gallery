@@ -829,7 +829,6 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         if (this.forceFullscreen) {
             this.manageFullscreen();
         }
-        this.refreshScrollOverview();
         this.showNext();
     };
     /**
@@ -891,25 +890,11 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
                 this.index = 0;
             }
             this.show();
-            this.refreshScrollOverview();
+            //this.refreshScrollOverview();
             return true;
         }
         else {
             return false;
-        }
-    };
-    /**
-     * @return {?}
-     */
-    NgxGalleryPreviewComponent.prototype.refreshScrollOverview = function () {
-        var _this = this;
-        if (this.showScrollOverview) {
-            setTimeout(function () {
-                if (_this.galleryContainer.scrollOverviewComponent) {
-                    _this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
-                    _this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
-                }
-            }, 1000);
         }
     };
     /**
@@ -923,7 +908,6 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
                 this.index = this.images.length - 1;
             }
             this.show();
-            this.refreshScrollOverview();
         }
     };
     /**
@@ -1182,6 +1166,10 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         this.src = this.getSafeUrl(/** @type {?} */ (this.images[this.index]));
         this.srcIndex = this.index;
         this.description = this.descriptions[this.index];
+        if (this.galleryContainer.scrollOverviewComponent) {
+            this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+            this.galleryContainer.scrollOverviewComponent.updatePreviewScales(/** @type {?} */ (this.images[this.index]));
+        }
         setTimeout(function () {
             if (_this.isLoaded(_this.previewImage.nativeElement)) {
                 _this.loading = false;
@@ -1218,10 +1206,6 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         }
         else {
             this.showScrollOverview = false;
-        }
-        if (this.galleryContainer.scrollOverviewComponent) {
-            this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
-            this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
         }
         return true;
     };
@@ -1756,25 +1740,31 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         // this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
     };
     /**
+     * @param {?} url
      * @return {?}
      */
-    NgxGalleryScrollOverviewComponent.prototype.updatePreviewScales = function () {
-        var /** @type {?} */ img = document.getElementsByClassName('ngx-gallery-fullsize');
-        var /** @type {?} */ width = img[0].clientWidth;
-        var /** @type {?} */ height = img[0].clientHeight;
-        // scale the preview image
-        this.previewContainerStyles["background-image"] = "url('" + img[0].getAttribute('src') + "')";
-        this.previewContainerStyles["background-size"] = (width / this.SCALE_FACTOR) + 'px ' + (height / this.SCALE_FACTOR) + 'px';
-        this.previewContainerStyles["min-height"] = (window.innerHeight / this.SCALE_FACTOR) + 10 + 'px';
-        this.previewContainerStyles["min-width"] = (window.innerWidth / this.SCALE_FACTOR) + 10 + 'px';
-        this.previewContainerStyles.width = (width / this.SCALE_FACTOR) + 'px';
-        this.previewContainerStyles.height = (height / this.SCALE_FACTOR) + 'px';
-        // scale the zoom container
-        this.zoomContainerStyles.height = (window.innerHeight / this.SCALE_FACTOR) + 'px';
-        this.zoomContainerStyles.width = (window.innerWidth / this.SCALE_FACTOR) + 'px';
-        // init
-        this.initialLeft = this.zoomPosition.positionLeft;
-        this.initialTop = this.zoomPosition.positionTop;
+    NgxGalleryScrollOverviewComponent.prototype.updatePreviewScales = function (url) {
+        var /** @type {?} */ img = new Image;
+        img.src = url;
+        var /** @type {?} */ width;
+        var /** @type {?} */ height;
+        var /** @type {?} */ scrollOverViewComponent = this;
+        img.onload = function () {
+            width = img.width;
+            height = img.height;
+            scrollOverViewComponent.previewContainerStyles["background-image"] = "url('" + url + "')";
+            scrollOverViewComponent.previewContainerStyles["background-size"] = (width / scrollOverViewComponent.SCALE_FACTOR) + 'px ' + (height / scrollOverViewComponent.SCALE_FACTOR) + 'px';
+            scrollOverViewComponent.previewContainerStyles["min-height"] = (window.innerHeight / scrollOverViewComponent.SCALE_FACTOR) + 10 + 'px';
+            scrollOverViewComponent.previewContainerStyles["min-width"] = (window.innerWidth / scrollOverViewComponent.SCALE_FACTOR) + 10 + 'px';
+            scrollOverViewComponent.previewContainerStyles.width = (width / scrollOverViewComponent.SCALE_FACTOR) + 'px';
+            scrollOverViewComponent.previewContainerStyles.height = (height / scrollOverViewComponent.SCALE_FACTOR) + 'px';
+            //scale the zoom container
+            scrollOverViewComponent.zoomContainerStyles.height = (window.innerHeight / scrollOverViewComponent.SCALE_FACTOR) + 'px';
+            scrollOverViewComponent.zoomContainerStyles.width = (window.innerWidth / scrollOverViewComponent.SCALE_FACTOR) + 'px';
+            // init
+            scrollOverViewComponent.initialLeft = scrollOverViewComponent.zoomPosition.positionLeft;
+            scrollOverViewComponent.initialTop = scrollOverViewComponent.zoomPosition.positionTop;
+        };
     };
     /**
      * @param {?} event
