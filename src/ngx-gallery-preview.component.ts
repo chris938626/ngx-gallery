@@ -146,7 +146,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             this.manageFullscreen();
         }
 
-        this.refreshScrollOverview();
         this.showNext();
     }
 
@@ -199,22 +198,10 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             }
 
             this.show();
-            this.refreshScrollOverview();
+            //this.refreshScrollOverview();
             return true;
         } else {
             return false;
-        }
-    }
-
-    private refreshScrollOverview() {
-        if (this.showScrollOverview) {
-            setTimeout(() => {
-                if (this.galleryContainer.scrollOverviewComponent) {
-                    this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
-                    this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
-                }
-
-            }, 1000)
         }
     }
 
@@ -228,7 +215,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             }
 
             this.show();
-            this.refreshScrollOverview();
         }
     }
 
@@ -422,7 +408,10 @@ export class NgxGalleryPreviewComponent implements OnChanges {
         this.src = this.getSafeUrl(<string>this.images[this.index]);
         this.srcIndex = this.index;
         this.description = this.descriptions[this.index];
-
+        if (this.galleryContainer.scrollOverviewComponent) {
+            this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
+            this.galleryContainer.scrollOverviewComponent.updatePreviewScales(<string>this.images[this.index]);
+        }
         setTimeout(() => {
             if (this.isLoaded(this.previewImage.nativeElement)) {
                 this.loading = false;
@@ -455,12 +444,10 @@ export class NgxGalleryPreviewComponent implements OnChanges {
 
         if (img.naturalHeight > window.innerHeight || img.naturalWidth > window.innerWidth) {
             this.showScrollOverview = true;
-        } else {
-            this.showScrollOverview = false;
+
         }
-        if (this.galleryContainer.scrollOverviewComponent) {
-            this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
-            this.galleryContainer.scrollOverviewComponent.updatePreviewScales();
+        else {
+            this.showScrollOverview = false;
         }
         return true;
     }
