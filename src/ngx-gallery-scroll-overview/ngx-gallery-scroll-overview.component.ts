@@ -37,26 +37,32 @@ export class NgxGalleryScrollOverviewComponent {
         // this.zoomContainerStyles.transform = 'translate(' + leftScaled + 'px,' + topScaled + 'px)';
     }
 
-    public updatePreviewScales() {
-        var img = document.getElementsByClassName('ngx-gallery-fullsize');
-        var width = img[0].clientWidth;
-        var height = img[0].clientHeight;
-        // scale the preview image
-        this.previewContainerStyles["background-image"] = "url('" + img[0].getAttribute('src') + "')";
-        this.previewContainerStyles["background-size"] = (width / this.SCALE_FACTOR ) + 'px ' + (height / this.SCALE_FACTOR ) + 'px';
-        this.previewContainerStyles["min-height"] = (window.innerHeight / this.SCALE_FACTOR) + 10 + 'px';
-        this.previewContainerStyles["min-width"] = (window.innerWidth / this.SCALE_FACTOR) + 10 + 'px';
+    public updatePreviewScales(url) {
+        var img = new Image;
+        img.src = url;
 
-        this.previewContainerStyles.width = (width / this.SCALE_FACTOR) + 'px'
-        this.previewContainerStyles.height = (height / this.SCALE_FACTOR) + 'px';
+        var width;
+        var height;
+        var scrollOverViewComponent = this;
+        img.onload = function(){
+            width = img.width;
+            height = img.height;
+            scrollOverViewComponent.previewContainerStyles["background-image"] = "url('" + url + "')";
+            scrollOverViewComponent.previewContainerStyles["background-size"] = (width / scrollOverViewComponent.SCALE_FACTOR ) + 'px ' + (height / scrollOverViewComponent.SCALE_FACTOR ) + 'px';
+            scrollOverViewComponent.previewContainerStyles["min-height"] = (window.innerHeight / scrollOverViewComponent.SCALE_FACTOR) + 10 + 'px';
+            scrollOverViewComponent.previewContainerStyles["min-width"] = (window.innerWidth / scrollOverViewComponent.SCALE_FACTOR) + 10 + 'px';
 
-        // scale the zoom container
-        this.zoomContainerStyles.height = (window.innerHeight / this.SCALE_FACTOR) + 'px';
-        this.zoomContainerStyles.width = (window.innerWidth / this.SCALE_FACTOR) + 'px';
+            scrollOverViewComponent.previewContainerStyles.width = (width / scrollOverViewComponent.SCALE_FACTOR) + 'px'
+            scrollOverViewComponent.previewContainerStyles.height = (height / scrollOverViewComponent.SCALE_FACTOR) + 'px';
 
-        // init
-        this.initialLeft = this.zoomPosition.positionLeft;
-        this.initialTop = this.zoomPosition.positionTop;
+            //scale the zoom container
+            scrollOverViewComponent.zoomContainerStyles.height = (window.innerHeight / scrollOverViewComponent.SCALE_FACTOR) + 'px';
+            scrollOverViewComponent.zoomContainerStyles.width = (window.innerWidth / scrollOverViewComponent.SCALE_FACTOR) + 'px';
+
+            // init
+            scrollOverViewComponent.initialLeft = scrollOverViewComponent.zoomPosition.positionLeft;
+            scrollOverViewComponent.initialTop = scrollOverViewComponent.zoomPosition.positionTop;
+        }
     }
 
     onStop(event) {
