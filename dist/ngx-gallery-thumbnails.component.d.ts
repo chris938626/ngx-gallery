@@ -36,7 +36,6 @@ export declare class NgxGalleryThumbnailsComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void;
     onMouseEnter(): void;
     onMouseLeave(): void;
-    onResize(): void;
     reset(index: number): void;
     getImages(): string[] | SafeResourceUrl[];
     handleClick(event: Event, index: number): void;

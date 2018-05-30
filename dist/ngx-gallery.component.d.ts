@@ -60,6 +60,7 @@ export declare class NgxGalleryComponent implements OnInit, DoCheck, AfterViewIn
     canShowNext(): boolean;
     canShowPrev(): boolean;
     previewSelect(index: number): void;
+    private resetThumbnails();
     private select(index);
     private checkFullWidth();
     private setImages();
