@@ -1789,7 +1789,7 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         { type: Component, args: [{
                     selector: 'ngx-gallery-scroll-overview',
                     template: "<div #myBounds id=\"preview-container\" [ngStyle]=\"previewContainerStyles\"> <div id=\"zoom-container\" [ngStyle]=\"zoomContainerStyles\" ngDraggable (started)=\"onStart($event)\" (stopped)=\"onStop($event)\" [bounds]=\"myBounds\" [inBounds]=\"true\"> </div> </div> ",
-                    styles: ["#preview-container { background-repeat: no-repeat; position: absolute; border-bottom: 0; right: 1vw; overflow: hidden; bottom: -80vh; } #bounds { width: 400px; height: 400px; background-color: blue; } #zoom-container { opacity: 0.5; padding: 0; background: black; cursor: move; } "]
+                    styles: ["#preview-container { background-repeat: no-repeat; position: absolute; right: 1vw; overflow: hidden; bottom: -80vh; border: 2px solid white; } #bounds { width: 400px; height: 400px; background-color: blue; } #zoom-container { padding: 0; cursor: move; border: 2px solid red; } "]
                 },] },
     ];
     /**
