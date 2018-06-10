@@ -1176,6 +1176,13 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
                     }
                 });
                 _this.previewImage.nativeElement.onload = function () {
+                    var /** @type {?} */ img = _this.previewImage.nativeElement;
+                    if (img.naturalHeight > window.innerHeight || img.naturalWidth > window.innerWidth) {
+                        _this.showScrollOverview = true;
+                    }
+                    else {
+                        _this.showScrollOverview = false;
+                    }
                     _this.loading = false;
                     _this.showSpinner = false;
                     _this.previewImage.nativeElement.onload = null;
@@ -1194,12 +1201,6 @@ var NgxGalleryPreviewComponent = /** @class */ (function () {
         }
         if (typeof img.naturalWidth !== 'undefined' && img.naturalWidth === 0) {
             return false;
-        }
-        if (img.naturalHeight > window.innerHeight || img.naturalWidth > window.innerWidth) {
-            this.showScrollOverview = true;
-        }
-        else {
-            this.showScrollOverview = false;
         }
         return true;
     };
