@@ -411,6 +411,7 @@ export class NgxGalleryPreviewComponent implements OnChanges {
             this.galleryContainer.scrollOverviewComponent.resetDetailZoom();
             this.galleryContainer.scrollOverviewComponent.updatePreviewScales(<string>this.images[this.index]);
         }
+
         setTimeout(() => {
             if (this.isLoaded(this.previewImage.nativeElement)) {
                 this.loading = false;
@@ -423,6 +424,13 @@ export class NgxGalleryPreviewComponent implements OnChanges {
                 })
 
                 this.previewImage.nativeElement.onload = () => {
+                    var img = this.previewImage.nativeElement;
+                    if (img.naturalHeight > window.innerHeight || img.naturalWidth > window.innerWidth) {
+                        this.showScrollOverview = true;
+                    }
+                    else {
+                        this.showScrollOverview = false;
+                    }
                     this.loading = false;
                     this.showSpinner = false;
                     this.previewImage.nativeElement.onload = null;
@@ -439,14 +447,6 @@ export class NgxGalleryPreviewComponent implements OnChanges {
 
         if (typeof img.naturalWidth !== 'undefined' && img.naturalWidth === 0) {
             return false;
-        }
-
-        if (img.naturalHeight > window.innerHeight || img.naturalWidth > window.innerWidth) {
-            this.showScrollOverview = true;
-
-        }
-        else {
-            this.showScrollOverview = false;
         }
         return true;
     }
