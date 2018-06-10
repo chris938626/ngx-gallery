@@ -4,9 +4,9 @@
     right:1vw;
     overflow: hidden;
     bottom: -80vh;
-    -webkit-box-shadow:inset 0px 0px 0px 3px white;
-    -moz-box-shadow:inset 0px 0px 0px 3px white;
-    box-shadow:inset 0px 0px 0px 3px white;
+    -webkit-box-shadow:inset 0px 0px 0px -3px white;
+    -moz-box-shadow:inset 0px 0px 0px -3px white;
+    box-shadow:inset 0px 0px 0px -3px white;
 }
 
 #bounds {
@@ -18,7 +18,7 @@
 #zoom-container {
     padding: 0;
     cursor: move;
-    -webkit-box-shadow:inset 0px 0px 0px 3px red;
-    -moz-box-shadow:inset 0px 0px 0px 3px red;
-    box-shadow:inset 0px 0px 0px 3px red;
+    -webkit-box-shadow:inset 0px 0px 0px -3px red;
+    -moz-box-shadow:inset 0px 0px 0px -3px red;
+    box-shadow:inset 0px 0px 0px -3px red;
 }
