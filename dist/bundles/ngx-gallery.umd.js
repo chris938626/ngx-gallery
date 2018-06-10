@@ -1791,7 +1791,7 @@ var NgxGalleryScrollOverviewComponent = /** @class */ (function () {
         { type: core.Component, args: [{
                     selector: 'ngx-gallery-scroll-overview',
                     template: "<div #myBounds id=\"preview-container\" [ngStyle]=\"previewContainerStyles\"> <div id=\"zoom-container\" [ngStyle]=\"zoomContainerStyles\" ngDraggable (started)=\"onStart($event)\" (stopped)=\"onStop($event)\" [bounds]=\"myBounds\" [inBounds]=\"true\"> </div> </div> ",
-                    styles: ["#preview-container { background-repeat: no-repeat; position: absolute; right: 1vw; overflow: hidden; bottom: -80vh; -webkit-box-shadow: inset 0px 0px 0px 3px white; -moz-box-shadow: inset 0px 0px 0px 3px white; box-shadow: inset 0px 0px 0px 3px white; } #bounds { width: 400px; height: 400px; background-color: blue; } #zoom-container { padding: 0; cursor: move; -webkit-box-shadow: inset 0px 0px 0px 3px red; -moz-box-shadow: inset 0px 0px 0px 3px red; box-shadow: inset 0px 0px 0px 3px red; } "]
+                    styles: ["#preview-container { background-repeat: no-repeat; position: absolute; right: 1vw; overflow: hidden; bottom: -80vh; -webkit-box-shadow: inset 0px 0px 0px -3px white; -moz-box-shadow: inset 0px 0px 0px -3px white; box-shadow: inset 0px 0px 0px -3px white; } #bounds { width: 400px; height: 400px; background-color: blue; } #zoom-container { padding: 0; cursor: move; -webkit-box-shadow: inset 0px 0px 0px -3px red; -moz-box-shadow: inset 0px 0px 0px -3px red; box-shadow: inset 0px 0px 0px -3px red; } "]
                 },] },
     ];
     /**
